@@ -1,14 +1,15 @@
 #!/usr/bin/env bash
-set -euo pipefail
 
 # ──────────────────────────────────────────────
-# Forçar execução com bash
+# Forçar execução com bash (antes do set -euo pipefail)
 # ──────────────────────────────────────────────
 if [ -z "$BASH_VERSION" ]; then
   echo -e "\033[0;31m✘\033[0m Este script precisa ser executado com bash, não com sh."
   echo "  Use: bash install-niri.sh"
   exit 1
 fi
+
+set -euo pipefail
 
 # ──────────────────────────────────────────────
 # Verificação: não rodar como root
