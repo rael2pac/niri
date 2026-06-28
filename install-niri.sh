@@ -12,47 +12,8 @@ fi
 set -euo pipefail
 
 # ──────────────────────────────────────────────
-# Verificação: não rodar como root
+# Cores e funções
 # ──────────────────────────────────────────────
-if [ "$EUID" -eq 0 ]; then
-  echo -e "\033[0;31m✘\033[0m NÃO execute este script como root (sudo)."
-  echo "  Execute como usuário normal. O script usará sudo automaticamente."
-  exit 1
-fi
-
-# ──────────────────────────────────────────────
-# Verificar sudo
-# ──────────────────────────────────────────────
-if ! command -v sudo &>/dev/null; then
-  echo -e "\033[0;31m✘\033[0m 'sudo' não está instalado."
-  echo "  Entre como root e instale: pacman -S sudo"
-  echo "  Depois configure: echo \"$USER ALL=(ALL) ALL\" >> /etc/sudoers"
-  exit 1
-fi
-
-info "Verificando acesso sudo... (digite sua senha se solicitado)"
-if ! sudo -v; then
-  echo -e "\033[0;31m✘\033[0m Você não tem permissão sudo."
-  echo "  Entre como root e configure: echo \"$USER ALL=(ALL) ALL\" >> /etc/sudoers"
-  exit 1
-fi
-ok "Acesso sudo confirmado"
-
-# ──────────────────────────────────────────────
-# ███╗   ██╗██╗██████╗ ██╗
-# ████╗  ██║██║██╔══██╗██║
-# ██╔██╗ ██║██║██████╔╝██║
-# ██║╚██╗██║██║██╔══██╗██║
-# ██║ ╚████║██║██║  ██║██║
-# ╚═╝  ╚═══╝╚═╝╚═╝  ╚═╝╚═╝
- # ──────────────────────────────────────────────
- #  Niri + Noctalia-shell — Instalação Completa
- #  By Rael2pac
- # ──────────────────────────────────────────────
-#  De uma instalação mínima do Arch ao seu
-#  ambiente desktop completo em Wayland.
-# ──────────────────────────────────────────────
-
 RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'
 CYAN='\033[0;36m'; MAG='\033[0;35m'; BOLD='\033[1m'; NC='\033[0m'
 
@@ -99,6 +60,48 @@ echo -e "  ${YELLOW}By Rael2pac 🚀${NC}"
   quote
   echo ""
 }
+
+# ──────────────────────────────────────────────
+# Verificação: não rodar como root
+# ──────────────────────────────────────────────
+if [ "$EUID" -eq 0 ]; then
+  echo -e "\033[0;31m✘\033[0m NÃO execute este script como root (sudo)."
+  echo "  Execute como usuário normal. O script usará sudo automaticamente."
+  exit 1
+fi
+
+# ──────────────────────────────────────────────
+# Verificar sudo
+# ──────────────────────────────────────────────
+if ! command -v sudo &>/dev/null; then
+  echo -e "\033[0;31m✘\033[0m 'sudo' não está instalado."
+  echo "  Entre como root e instale: pacman -S sudo"
+  echo "  Depois configure: echo \"$USER ALL=(ALL) ALL\" >> /etc/sudoers"
+  exit 1
+fi
+
+info "Verificando acesso sudo... (digite sua senha se solicitado)"
+if ! sudo -v; then
+  echo -e "\033[0;31m✘\033[0m Você não tem permissão sudo."
+  echo "  Entre como root e configure: echo \"$USER ALL=(ALL) ALL\" >> /etc/sudoers"
+  exit 1
+fi
+ok "Acesso sudo confirmado"
+
+# ──────────────────────────────────────────────
+# ███╗   ██╗██╗██████╗ ██╗
+# ████╗  ██║██║██╔══██╗██║
+# ██╔██╗ ██║██║██████╔╝██║
+# ██║╚██╗██║██║██╔══██╗██║
+# ██║ ╚████║██║██║  ██║██║
+# ╚═╝  ╚═══╝╚═╝╚═╝  ╚═╝╚═╝
+ # ──────────────────────────────────────────────
+ #  Niri + Noctalia-shell — Instalação Completa
+ #  By Rael2pac
+ # ──────────────────────────────────────────────
+#  De uma instalação mínima do Arch ao seu
+#  ambiente desktop completo em Wayland.
+# ──────────────────────────────────────────────
 
 # ──────────────────────────────────────────────
 # 1. Boas-vindas
