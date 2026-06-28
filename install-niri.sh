@@ -243,8 +243,8 @@ if [ ! -d "$HOME/.config/niri" ]; then
   warn "Nenhuma config encontrada no pendrive."
   info "Clone manual do repositório de dotfiles:"
   echo ""
-  echo "    git clone https://github.com/rael2pac/dotfiles.git /tmp/dotfiles"
-  echo "    cp -r /tmp/dotfiles/.config/* ~/.config/"
+    echo "    git clone https://github.com/rael2pac/niri.git /tmp/niri"
+    echo "    cp -r /tmp/niri/.config/* ~/.config/"
   echo ""
 fi
 
