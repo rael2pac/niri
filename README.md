@@ -12,12 +12,12 @@ Configurações pessoais para meu ambiente Arch Linux com:
 ## Instalação
 
 ```bash
-git clone https://github.com/rael2pac/dotfiles.git /tmp/dotfiles
-cp -r /tmp/dotfiles/.config/* ~/.config/
+git clone https://github.com/rael2pac/niri.git /tmp/niri
+cp -r /tmp/niri/.config/* ~/.config/
 ```
 
-Ou use o script completo:
+Ou use o script completo (recomendado):
 
 ```bash
-curl -sS https://raw.githubusercontent.com/rael2pac/dotfiles/main/install-niri.sh | bash
+curl -sS https://raw.githubusercontent.com/rael2pac/niri/main/install-niri.sh | bash
 ```

@@ -63,18 +63,6 @@ echo -e "  ${YELLOW}By Rael2pac 🚀${NC}"
   echo ""
 }
 
-spin() {
-  local pid=$1; local msg=$2
-  local spin='⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏'
-  local i=0
-  while kill -0 "$pid" 2>/dev/null; do
-    printf "\r  ${CYAN}%s${NC} %s" "${spin:$i:1}" "$msg"
-    i=$(( (i+1) % ${#spin} ))
-    sleep 0.1
-  done
-  printf "\r  ${GREEN}✔${NC} %s\n" "$msg"
-}
-
 # ──────────────────────────────────────────────
 # 1. Boas-vindas
 # ──────────────────────────────────────────────
@@ -109,13 +97,13 @@ fi
 step "🔧 Preparando ferramentas básicas..."
 
 info "Instalando git e base-devel..."
-(pacman -S --needed --noconfirm git base-devel > /dev/null 2>&1) &
-spin $! "Instalando git e base-devel"
+pacman -S --needed --noconfirm git base-devel
+ok "git e base-devel instalados"
 
 if ! command -v yay &>/dev/null; then
   info "Preparando AUR helper (yay)..."
-  git clone https://aur.archlinux.org/yay-bin.git /tmp/yay-bin > /dev/null 2>&1
-  (cd /tmp/yay-bin && makepkg -si --noconfirm > /dev/null 2>&1)
+  git clone https://aur.archlinux.org/yay-bin.git /tmp/yay-bin
+  (cd /tmp/yay-bin && makepkg -si --noconfirm)
   rm -rf /tmp/yay-bin
   ok "yay instalado com sucesso"
   quote
@@ -147,9 +135,11 @@ OFFICIAL_PACKAGES=(
 
 step "📦 Instalando pacotes oficiais..."
 info "${#OFFICIAL_PACKAGES[@]} pacotes — isso pode levar alguns minutos..."
+info "Confira o progresso abaixo:"
+echo ""
 
-(pacman -S --needed --noconfirm "${OFFICIAL_PACKAGES[@]}" > /dev/null 2>&1) &
-spin $! "Instalando pacotes do sistema"
+pacman -S --needed --noconfirm "${OFFICIAL_PACKAGES[@]}"
+echo ""
 ok "Pacotes oficiais instalados"
 quote
 
@@ -164,10 +154,31 @@ AUR_PACKAGES=(
 
 step "🌟 Instalando pacotes AUR..."
 info "Noctalia Shell, temas e fontes Microsoft..."
+info "Confira o progresso abaixo:"
+echo ""
 
-(yay -S --needed --noconfirm "${AUR_PACKAGES[@]}" > /dev/null 2>&1) &
-spin $! "Instalando pacotes da comunidade (AUR)"
+yay -S --needed --noconfirm "${AUR_PACKAGES[@]}"
+echo ""
 ok "Pacotes AUR instalados"
+quote
+
+# ──────────────────────────────────────────────
+# 5b. Verificar instalação do Niri
+# ──────────────────────────────────────────────
+step "🔍 Verificando instalação do Niri..."
+
+if command -v niri &>/dev/null; then
+  ok "Niri detectado: $(niri --version 2>/dev/null || echo 'versão desconhecida')"
+else
+  warn "Niri não foi encontrado no PATH."
+  info "Tentando reinstalar..."
+  pacman -S --noconfirm niri
+  if command -v niri &>/dev/null; then
+    ok "Niri instalado com sucesso!"
+  else
+    err "Niri ainda não encontrado. Instale manualmente: sudo pacman -S niri"
+  fi
+fi
 quote
 
 # ──────────────────────────────────────────────
@@ -184,11 +195,12 @@ NERD_FONTS=(
 
 step "🔤 Instalando Nerd Fonts..."
 info "JetBrains Mono, Meslo, Hack, FiraCode, Fantasque..."
-info "🔔 Atualizando cache de fontes — seu terminal vai ficar lindo!"
+echo ""
 
-(pacman -S --needed --noconfirm "${NERD_FONTS[@]}" > /dev/null 2>&1) &
-spin $! "Instalando Nerd Fonts"
-fc-cache -f > /dev/null 2>&1
+pacman -S --needed --noconfirm "${NERD_FONTS[@]}"
+echo ""
+info "🔔 Atualizando cache de fontes..."
+fc-cache -f
 ok "Nerd Fonts instaladas — seu terminal nunca mais será o mesmo"
 quote
 
@@ -199,8 +211,7 @@ step "🚀 Configurando SDDM..."
 
 if ! pacman -Qi sddm-astronaut-theme &>/dev/null; then
   info "Instalando tema astronauta..."
-  (yay -S --needed --noconfirm sddm-astronaut-theme > /dev/null 2>&1) &
-  spin $! "Instalando sddm-astronaut-theme"
+  yay -S --needed --noconfirm sddm-astronaut-theme
 fi
 
 sudo mkdir -p /etc/sddm.conf.d
@@ -238,14 +249,16 @@ if [ -n "$PENDRIVE" ]; then
   quote
 fi
 
-# Fallback: clonar dotfiles do git
+# Fallback: clonar dotfiles do git automaticamente
 if [ ! -d "$HOME/.config/niri" ]; then
-  warn "Nenhuma config encontrada no pendrive."
-  info "Clone manual do repositório de dotfiles:"
+  warn "Nenhuma config encontrada no pendrive. Clonando do GitHub..."
+  info "Baixando dotfiles de https://github.com/rael2pac/niri.git"
   echo ""
-    echo "    git clone https://github.com/rael2pac/niri.git /tmp/niri"
-    echo "    cp -r /tmp/niri/.config/* ~/.config/"
-  echo ""
+  git clone https://github.com/rael2pac/niri.git /tmp/niri-dotfiles
+  cp -r /tmp/niri-dotfiles/.config/* "$HOME/.config/"
+  rm -rf /tmp/niri-dotfiles
+  ok "Configurações restauradas do GitHub!"
+  quote
 fi
 
 # ──────────────────────────────────────────────
@@ -254,15 +267,15 @@ fi
 step "⚡ Ativando serviços do sistema..."
 
 info "Bluetooth..."
-(sudo systemctl enable --now bluetooth > /dev/null 2>&1) &
-spin $! "Ativando Bluetooth"
+sudo systemctl enable --now bluetooth || true
+ok "Bluetooth ativado"
 
 info "PipeWire (áudio)..."
-systemctl --user enable --now pipewire pipewire-pulse wireplumber > /dev/null 2>&1 || true
+systemctl --user enable --now pipewire pipewire-pulse wireplumber 2>&1 || true
 ok "PipeWire ativado"
 
 info "SDDM (login)..."
-sudo systemctl enable sddm > /dev/null 2>&1
+sudo systemctl enable sddm 2>&1 || true
 ok "SDDM pronto para iniciar"
 
 quote
@@ -285,7 +298,7 @@ gtk-xft-hintstyle=hintslight
 gtk-xft-rgba=rgb
 EOF
 
-command -v nwg-look &>/dev/null && nwg-look -a > /dev/null 2>&1 || true
+command -v nwg-look &>/dev/null && nwg-look -a 2>&1 || true
 ok "Tema escuro aplicado — suave para os olhos"
 quote
 
@@ -294,8 +307,8 @@ quote
 # ──────────────────────────────────────────────
 step "📁 Configurando diretórios do usuário..."
 info "🔔 Criando Diretórios como Downloads, Documentos, Imagens..."
-xdg-user-dirs-update > /dev/null 2>&1 || true
-xdg-user-dirs-gtk-update > /dev/null 2>&1 || true
+xdg-user-dirs-update 2>&1 || true
+xdg-user-dirs-gtk-update 2>&1 || true
 ok "Diretórios criados"
 
 
