@@ -2,6 +2,15 @@
 set -euo pipefail
 
 # ──────────────────────────────────────────────
+# Verificação: não rodar como root
+# ──────────────────────────────────────────────
+if [ "$EUID" -eq 0 ]; then
+  echo -e "\033[0;31m✘\033[0m NÃO execute este script como root (sudo)."
+  echo "  Execute como usuário normal. O script usará sudo automaticamente."
+  exit 1
+fi
+
+# ──────────────────────────────────────────────
 # ███╗   ██╗██╗██████╗ ██╗
 # ████╗  ██║██║██╔══██╗██║
 # ██╔██╗ ██║██║██████╔╝██║
@@ -97,7 +106,7 @@ fi
 step "🔧 Preparando ferramentas básicas..."
 
 info "Instalando git e base-devel..."
-pacman -S --needed --noconfirm git base-devel
+sudo pacman -S --needed --noconfirm git base-devel
 ok "git e base-devel instalados"
 
 if ! command -v yay &>/dev/null; then
@@ -138,7 +147,7 @@ info "${#OFFICIAL_PACKAGES[@]} pacotes — isso pode levar alguns minutos..."
 info "Confira o progresso abaixo:"
 echo ""
 
-pacman -S --needed --noconfirm "${OFFICIAL_PACKAGES[@]}"
+sudo pacman -S --needed --noconfirm "${OFFICIAL_PACKAGES[@]}"
 echo ""
 ok "Pacotes oficiais instalados"
 quote
@@ -172,7 +181,7 @@ if command -v niri &>/dev/null; then
 else
   warn "Niri não foi encontrado no PATH."
   info "Tentando reinstalar..."
-  pacman -S --noconfirm niri
+  sudo pacman -S --noconfirm niri
   if command -v niri &>/dev/null; then
     ok "Niri instalado com sucesso!"
   else
@@ -197,10 +206,10 @@ step "🔤 Instalando Nerd Fonts..."
 info "JetBrains Mono, Meslo, Hack, FiraCode, Fantasque..."
 echo ""
 
-pacman -S --needed --noconfirm "${NERD_FONTS[@]}"
+sudo pacman -S --needed --noconfirm "${NERD_FONTS[@]}"
 echo ""
 info "🔔 Atualizando cache de fontes..."
-fc-cache -f
+sudo fc-cache -f
 ok "Nerd Fonts instaladas — seu terminal nunca mais será o mesmo"
 quote
 
