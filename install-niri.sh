@@ -2,6 +2,15 @@
 set -euo pipefail
 
 # ──────────────────────────────────────────────
+# Forçar execução com bash
+# ──────────────────────────────────────────────
+if [ -z "$BASH_VERSION" ]; then
+  echo -e "\033[0;31m✘\033[0m Este script precisa ser executado com bash, não com sh."
+  echo "  Use: bash install-niri.sh"
+  exit 1
+fi
+
+# ──────────────────────────────────────────────
 # Verificação: não rodar como root
 # ──────────────────────────────────────────────
 if [ "$EUID" -eq 0 ]; then
