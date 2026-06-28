@@ -119,6 +119,9 @@ echo -e "  ${YELLOW}⚠${NC} Este script irá transformar seu Arch recém-instal
 echo -e "     em um ambiente Niri + Noctalia Shell completo."
 echo -e "  ${YELLOW}⚠${NC} Certifique-se de estar conectado à internet."
 echo ""
+echo -n "  ${CYAN}⌨${NC} Pressione ENTER para iniciar a instalação... "
+read -r
+echo ""
 
 # ──────────────────────────────────────────────
 # 2. Detectar pendrive com configs
