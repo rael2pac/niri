@@ -241,7 +241,7 @@ echo ""
 sudo pacman -S --needed --noconfirm "${NERD_FONTS[@]}"
 echo ""
 info "🔔 Atualizando cache de fontes..."
-sudo fc-cache -f
+sudo fc-cache -f 2>/dev/null || true
 ok "Nerd Fonts instaladas — seu terminal nunca mais será o mesmo"
 quote
 
@@ -356,7 +356,7 @@ ok "Diretórios criados"
 # ──────────────────────────────────────────────
 # 12. Final — escolha do usuário
 # ──────────────────────────────────────────────
-clear
+clear 2>/dev/null || true
 echo -e "${GREEN}"
 echo ' ██╗███╗   ██╗███████╗████████╗ █████╗ ██╗      █████╗  ██████╗ █████╗  ██████╗'
 echo ' ██║████╗  ██║██╔════╝╚══██╔══╝██╔══██╗██║     ██╔══██╗██╔════╝██╔══██╗██╔══██╗'
