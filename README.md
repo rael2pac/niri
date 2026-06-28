@@ -13,7 +13,11 @@ Configurações pessoais para meu ambiente Arch Linux com:
 
 ### 1. Instalar o Arch
 
-Use o `archinstall` normalmente. O script cuida do resto.
+Use o `archinstall`. Durante a instalação:
+
+- **Perfil**: selecione `xorg` (não precisa de DE, o script instala o Niri depois)
+- **Driver**: escolha o compatível com sua placa (`NVIDIA`, `AMD`, `Intel`, `VMware`)
+- **Kernels**: pode marcar `linux-zen` e `linux-lts` (opcional, o script instala os headers)
 
 ### 2. Rodar o script
 
