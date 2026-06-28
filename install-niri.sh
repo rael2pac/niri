@@ -23,6 +23,13 @@ ok()    { echo -e "  ${GREEN}✔${NC} $1"; }
 warn()  { echo -e "  ${YELLOW}⚠${NC} $1"; }
 err()   { echo -e "  ${RED}✘${NC} $1"; }
 
+run() {
+  info "$1"
+  shift
+  "$@"
+  echo -e "  ${GREEN}✔${NC} concluído"
+}
+
 quote() {
   local quotes=(
     "O terminal é o melhor amigo do admin. — ditado popular"
@@ -136,13 +143,9 @@ fi
 # ──────────────────────────────────────────────
 step "🔧 Preparando ferramentas básicas..."
 
-info "Sincronizando banco de dados do pacman..."
-sudo pacman -Sy --noconfirm
-ok "Banco de dados sincronizado"
+run "Sincronizando banco de dados..." sudo pacman -Sy --noconfirm
 
-info "Instalando git e base-devel..."
-sudo pacman -S --needed --noconfirm git base-devel
-ok "git e base-devel instalados"
+run "Instalando git e base-devel..." sudo pacman -S --needed --noconfirm git base-devel
 
 if ! command -v yay &>/dev/null; then
   info "Preparando AUR helper (yay)..."
@@ -243,8 +246,7 @@ echo ""
 
 sudo pacman -S --needed --noconfirm "${NERD_FONTS[@]}"
 echo ""
-info "🔔 Atualizando cache de fontes..."
-sudo fc-cache -f 2>/dev/null || true
+run "Atualizando cache de fontes..." sudo fc-cache -f
 ok "Nerd Fonts instaladas — seu terminal nunca mais será o mesmo"
 quote
 
