@@ -152,6 +152,7 @@ run "Instalando git e base-devel..." sudo pacman -S --needed --noconfirm git bas
 
 if ! command -v yay &>/dev/null; then
   info "Preparando AUR helper (yay)..."
+  rm -rf /tmp/yay-bin
   git clone https://aur.archlinux.org/yay-bin.git /tmp/yay-bin
   (cd /tmp/yay-bin && makepkg -si --noconfirm)
   rm -rf /tmp/yay-bin
