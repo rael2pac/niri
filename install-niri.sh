@@ -142,13 +142,27 @@ else
 fi
 
 # ──────────────────────────────────────────────
-# 3. Git + base-devel + yay
+# 3. Otimizar compilação + ferramentas básicas
 # ──────────────────────────────────────────────
-step "🔧 Preparando ferramentas básicas..."
+step "⚙️ Otimizando sistema para compilação..."
 
-run "Sincronizando banco de dados..." sudo pacman -Sy --noconfirm
+run "Sincronizando bancos e instalando nano, git..." sudo pacman -Sy --needed --noconfirm nano git
 
-run "Instalando git e base-devel..." sudo pacman -S --needed --noconfirm git base-devel
+if ! sudo pacman -Qi base-devel &>/dev/null; then
+  run "Instalando base-devel..." sudo pacman -S --needed --noconfirm base-devel
+fi
+
+CORES=$(nproc)
+MAKEFLAGS="-j$((CORES + 1))"
+if grep -q "^#MAKEFLAGS" /etc/makepkg.conf 2>/dev/null; then
+  sudo sed -i "s/^#MAKEFLAGS=\"-j2\"/MAKEFLAGS=\"$MAKEFLAGS\"/" /etc/makepkg.conf
+  ok "MAKEFLAGS ajustado para $MAKEFLAGS ($CORES núcleos + 1)"
+elif ! grep -q "^MAKEFLAGS" /etc/makepkg.conf 2>/dev/null; then
+  echo "MAKEFLAGS=\"$MAKEFLAGS\"" | sudo tee -a /etc/makepkg.conf > /dev/null
+  ok "MAKEFLAGS definido como $MAKEFLAGS"
+else
+  info "MAKEFLAGS já configurado"
+fi
 
 if ! command -v yay &>/dev/null; then
   info "Preparando AUR helper (yay)..."
