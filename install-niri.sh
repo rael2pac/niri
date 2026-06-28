@@ -25,16 +25,18 @@ fi
 # ──────────────────────────────────────────────
 if ! command -v sudo &>/dev/null; then
   echo -e "\033[0;31m✘\033[0m 'sudo' não está instalado."
-  echo "  Instale como root: pacman -S sudo"
+  echo "  Entre como root e instale: pacman -S sudo"
   echo "  Depois configure: echo \"$USER ALL=(ALL) ALL\" >> /etc/sudoers"
   exit 1
 fi
 
+info "Verificando acesso sudo... (digite sua senha se solicitado)"
 if ! sudo -v; then
   echo -e "\033[0;31m✘\033[0m Você não tem permissão sudo."
-  echo "  Configure como root: echo \"$USER ALL=(ALL) ALL\" >> /etc/sudoers"
+  echo "  Entre como root e configure: echo \"$USER ALL=(ALL) ALL\" >> /etc/sudoers"
   exit 1
 fi
+ok "Acesso sudo confirmado"
 
 # ──────────────────────────────────────────────
 # ███╗   ██╗██╗██████╗ ██╗
@@ -130,6 +132,10 @@ fi
 # 3. Git + base-devel + yay
 # ──────────────────────────────────────────────
 step "🔧 Preparando ferramentas básicas..."
+
+info "Sincronizando banco de dados do pacman..."
+sudo pacman -Sy --noconfirm
+ok "Banco de dados sincronizado"
 
 info "Instalando git e base-devel..."
 sudo pacman -S --needed --noconfirm git base-devel
