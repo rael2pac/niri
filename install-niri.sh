@@ -308,6 +308,16 @@ if [ ! -d "$HOME/.config/niri" ]; then
 fi
 
 # ──────────────────────────────────────────────
+# 8b. Corrigir caminhos absolutos para o usuário atual
+# ──────────────────────────────────────────────
+step "🔄 Adaptando configs para seu usuário..."
+info "Substituindo caminhos de /home/rael/ para $HOME/"
+find "$HOME/.config" -type f \( -name "*.json" -o -name "*.conf" -o -name "bookmarks" \) \
+  -exec sed -i "s|/home/rael/|$HOME/|g" {} + 2>/dev/null || true
+ok "Caminhos ajustados para $USER"
+quote
+
+# ──────────────────────────────────────────────
 # 9. Ativar serviços
 # ──────────────────────────────────────────────
 step "⚡ Ativando serviços do sistema..."
