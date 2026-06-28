@@ -1,0 +1,16 @@
+# Images / previews
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.mp4
+*.webp
+Assets/
+
+# Auto-generated
+fish_variables
+__pycache__/
+*.pyc
+.DS_Store
+thumbs.db
+*.tar.gz
