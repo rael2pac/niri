@@ -1,39 +1,39 @@
 {
     "sources": [
         {
-            "enabled": true,
+            "enabled": false,
             "name": "Noctalia Plugins",
             "url": "https://github.com/noctalia-dev/noctalia-plugins"
         },
         {
-            "enabled": true,
+            "enabled": false,
             "name": "Rael2pac",
             "url": "https://github.com/rael2pac/Noctalia-plugins"
         }
     ],
     "states": {
         "467130:arch-updater": {
-            "enabled": true,
+            "enabled": false,
             "sourceUrl": "https://github.com/rael2pac/Noctalia-plugins"
         },
         "467130:controller-battery": {
-            "enabled": true,
+            "enabled": false,
             "sourceUrl": "https://github.com/rael2pac/Noctalia-plugins"
         },
         "467130:hdmi-toggle": {
-            "enabled": true,
+            "enabled": false,
             "sourceUrl": "https://github.com/rael2pac/Noctalia-plugins"
         },
         "clipper": {
-            "enabled": true,
+            "enabled": false,
             "sourceUrl": "https://github.com/noctalia-dev/noctalia-plugins"
         },
         "polkit-agent": {
-            "enabled": true,
+            "enabled": false,
             "sourceUrl": "https://github.com/noctalia-dev/noctalia-plugins"
         },
         "simple-notes": {
-            "enabled": true,
+            "enabled": false,
             "sourceUrl": "https://github.com/noctalia-dev/noctalia-plugins"
         }
     },
