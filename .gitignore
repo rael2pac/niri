@@ -1,5 +1,6 @@
 # Images / previews
 *.png
+!.config/fastfetch/images/ZeroTwo3.png
 *.jpg
 *.jpeg
 *.gif
