@@ -307,7 +307,7 @@ if [ -n "$PENDRIVE" ]; then
       ok "${archive%.tar.gz} restaurado"
     fi
   done
-  for cfg in fastfetch kitty fish gtk-3.0 gtk-4.0 qt5ct qt6ct fuzzel; do
+  for cfg in fastfetch kitty fish gtk-3.0 gtk-4.0 qt5ct qt6ct fuzzel dolphinrc; do
     if [ -f "$PENDRIVE/$cfg.tar.gz" ]; then
       tar -xzf "$PENDRIVE/$cfg.tar.gz" -C "$HOME/.config"
       info "$cfg restaurado"
@@ -319,6 +319,17 @@ if [ -n "$PENDRIVE" ]; then
     ok "Ícones restaurados do pendrive"
   fi
   quote
+fi
+
+# Fallback: copiar configs do diretório do script
+if [ -d "$(dirname "$0")/.config" ]; then
+  info "Copiando configs do diretório local..."
+  for cfg in dolphinrc; do
+    if [ -f "$(dirname "$0")/.config/$cfg" ]; then
+      cp "$(dirname "$0")/.config/$cfg" "$HOME/.config/$cfg"
+      ok "$cfg restaurado do diretório local"
+    fi
+  done
 fi
 
 # Fallback: clonar dotfiles do git automaticamente
@@ -378,7 +389,7 @@ write_gtk_dark() {
   cat > "$1" << 'EOF'
 [Settings]
 gtk-theme-name=adw-gtk3-dark
-gtk-icon-theme-name=Papirus-Dark
+gtk-icon-theme-name=Breeze-Chameleon-Devices
 gtk-font-name=Adwaita Sans 11
 gtk-application-prefer-dark-theme=1
 gtk-xft-antialias=1
@@ -397,6 +408,30 @@ command -v nwg-look &>/dev/null && nwg-look -a 2>&1 || true
 write_gtk_dark "$HOME/.config/gtk-3.0/settings.ini"
 write_gtk_dark "$HOME/.config/gtk-4.0/settings.ini"
 
+# Extrair temas de ícones
+install_icon_theme() {
+  local name="$1" file="$2" extract_dir="$3"
+  local dir="$HOME/.local/share/icons/$extract_dir"
+  local src=""
+  if [ -f "$(dirname "$0")/$file" ]; then
+    src="$(dirname "$0")/$file"
+  elif [ -n "$PENDRIVE" ] && [ -f "$PENDRIVE/$file" ]; then
+    src="$PENDRIVE/$file"
+  fi
+  if [ -n "$src" ]; then
+    mkdir -p "$HOME/.local/share/icons"
+    tar -xzf "$src" -C "$HOME/.local/share/icons"
+    gtk-update-icon-cache "$dir" > /dev/null 2>&1 || true
+    info "$name instalado em ~/.local/share/icons/"
+  else
+    warn "$file não encontrado — extraia manualmente em ~/.local/share/icons/"
+  fi
+}
+install_icon_theme "Breeze-Round-Chameleon Dark" "Breeze-Round-Chameleon-Dark.tar.gz" "Breeze-Round-Chameleon Dark Icons"
+install_icon_theme "KrystalSVG-Devices" "KrystalSVG-Devices.tar.gz" "KrystalSVG-Devices"
+install_icon_theme "Breeze-Chameleon-Devices" "Breeze-Chameleon-Devices.tar.gz" "Breeze-Chameleon-Devices"
+
+command -v nwg-look &>/dev/null && nwg-look -a > /dev/null 2>&1 || true
 ok "Tema escuro aplicado — suave para os olhos"
 quote
 
