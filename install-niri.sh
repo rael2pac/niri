@@ -389,7 +389,7 @@ write_gtk_dark() {
   cat > "$1" << 'EOF'
 [Settings]
 gtk-theme-name=adw-gtk3-dark
-gtk-icon-theme-name=BRC-Devices
+gtk-icon-theme-name=Breeze-Chameleon-Devices
 gtk-font-name=Adwaita Sans 11
 gtk-application-prefer-dark-theme=1
 gtk-xft-antialias=1
@@ -429,7 +429,7 @@ install_icon_theme() {
 }
 install_icon_theme "Breeze-Round-Chameleon Dark" "Breeze-Round-Chameleon-Dark.tar.gz" "Breeze-Round-Chameleon Dark Icons"
 install_icon_theme "KrystalSVG-Devices" "KrystalSVG-Devices.tar.gz" "KrystalSVG-Devices"
-install_icon_theme "BRC-Devices" "BRC-Devices.tar.gz" "BRC-Devices"
+install_icon_theme "Breeze-Chameleon-Devices" "Breeze-Chameleon-Devices.tar.gz" "Breeze-Chameleon-Devices"
 
 command -v nwg-look &>/dev/null && nwg-look -a > /dev/null 2>&1 || true
 ok "Tema escuro aplicado — suave para os olhos"
