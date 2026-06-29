@@ -373,7 +373,9 @@ quote
 step "🌙 Aplicando tema escuro..."
 
 mkdir -p "$HOME/.config/gtk-3.0" "$HOME/.config/gtk-4.0"
-cat > "$HOME/.config/gtk-3.0/settings.ini" << 'EOF'
+
+write_gtk_dark() {
+  cat > "$1" << 'EOF'
 [Settings]
 gtk-theme-name=adw-gtk3-dark
 gtk-icon-theme-name=Papirus-Dark
@@ -384,8 +386,17 @@ gtk-xft-hinting=1
 gtk-xft-hintstyle=hintslight
 gtk-xft-rgba=rgb
 EOF
+}
+
+write_gtk_dark "$HOME/.config/gtk-3.0/settings.ini"
+write_gtk_dark "$HOME/.config/gtk-4.0/settings.ini"
 
 command -v nwg-look &>/dev/null && nwg-look -a 2>&1 || true
+
+# Reforça dark theme (nwg-look pode sobrescrever)
+write_gtk_dark "$HOME/.config/gtk-3.0/settings.ini"
+write_gtk_dark "$HOME/.config/gtk-4.0/settings.ini"
+
 ok "Tema escuro aplicado — suave para os olhos"
 quote
 
