@@ -5,7 +5,6 @@ include "noctalia.kdl"
 environment {
     QT_QPA_PLATFORM "wayland"
     QT_QPA_PLATFORMTHEME "qt6ct"
-    GTK_APPLICATION_PREFER_DARK_THEME "1"
     XDG_MENU_PREFIX "arch-"
     DISPLAY ":0"
 }
@@ -56,6 +55,7 @@ layout {
 
 // XWayland via xwayland-satellite — necessário para apps X11 como Discord, Figma, etc.
 // Sem isso, apps X11 não abrem no Niri (que é Wayland puro).
+spawn-at-startup "dbus-update-activation-environment" "--systemd" "GTK_THEME=adw-gtk3-dark" "QT_QPA_PLATFORM=wayland" "QT_QPA_PLATFORMTHEME=qt6ct"
 spawn-at-startup "xwayland-satellite"
 spawn-at-startup "qs" "-c" "noctalia-shell"
 // Reconstrói cache de serviços KDE (Dolphin, Kate, etc.)
