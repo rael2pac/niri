@@ -387,7 +387,18 @@ ok "Tema escuro aplicado — suave para os olhos"
 quote
 
 # ──────────────────────────────────────────────
-# 11. Ícones
+# 11. Dolphin padrão (xdg-mime)
+# ──────────────────────────────────────────────
+step "🐬 Definindo Dolphin como gerenciador padrão..."
+info "Associando pastas, arquivos e lixeira ao Dolphin..."
+xdg-mime default org.kde.dolphin.desktop inode/directory
+xdg-mime default org.kde.dolphin.desktop x-scheme-handler/file
+xdg-mime default org.kde.dolphin.desktop x-scheme-handler/trash
+ok "Dolphin é o padrão — abrir pasta = Dolphin"
+quote
+
+# ──────────────────────────────────────────────
+# 12. Ícones
 # ──────────────────────────────────────────────
 step "🎨 Restaurando ícones..."
 ICONS_DIR="$HOME/.local/share/icons"
@@ -406,7 +417,7 @@ fi
 quote
 
 # ──────────────────────────────────────────────
-# 12. xdg-user-dirs
+# 13. xdg-user-dirs
 # ──────────────────────────────────────────────
 step "📁 Configurando diretórios do usuário..."
 info "🔔 Criando Diretórios como Downloads, Documentos, Imagens..."
@@ -416,7 +427,7 @@ ok "Diretórios criados"
 
 
 # ──────────────────────────────────────────────
-# 13. Final — escolha do usuário
+# 14. Final — escolha do usuário
 # ──────────────────────────────────────────────
 clear 2>/dev/null || true
 echo -e "${GREEN}"
