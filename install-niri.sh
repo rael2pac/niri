@@ -196,6 +196,8 @@ OFFICIAL_PACKAGES=(
   linux-lts-headers linux-zen-headers
   nwg-look
   noto-fonts noto-fonts-emoji ttf-dejavu
+  ntfs-3g exfatprogs dosfstools btrfs-progs xfsprogs
+  jfsutils f2fs-tools udftools e2fsprogs gvfs
 )
 
 step "📦 Instalando pacotes oficiais..."
