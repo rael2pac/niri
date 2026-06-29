@@ -18,5 +18,5 @@ thumbs.db
 # tar.gz only allowed for shipped icon themes
 *.tar.gz
 !KrystalSVG-Devices.tar.gz
-!Breeze-Chameleon-Devices.tar.gz
 !Breeze-Round-Chameleon-Dark.tar.gz
+!BRC-Devices.tar.gz
