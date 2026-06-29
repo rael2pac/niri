@@ -203,6 +203,7 @@ OFFICIAL_PACKAGES=(
 step "📦 Instalando pacotes oficiais..."
 info "${#OFFICIAL_PACKAGES[@]} pacotes — isso pode levar alguns minutos..."
 info "Confira o progresso abaixo:"
+info "ntfs-3g exfatprogs dosfstools btrfs-progs xfsprogs jfsutils f2fs-tools udftools e2fsprogs gvfs — suporte a sistemas de arquivos"
 echo ""
 
 sudo pacman -S --needed --noconfirm "${OFFICIAL_PACKAGES[@]}"
