@@ -14,4 +14,9 @@ __pycache__/
 *.pyc
 .DS_Store
 thumbs.db
-# *.tar.gz — removido para permitir icons.tar.gz
+
+# tar.gz only allowed for shipped icon themes
+*.tar.gz
+!KrystalSVG-Devices.tar.gz
+!Breeze-Chameleon-Devices.tar.gz
+!Breeze-Round-Chameleon-Dark.tar.gz
