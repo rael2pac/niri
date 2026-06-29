@@ -13,4 +13,4 @@ __pycache__/
 *.pyc
 .DS_Store
 thumbs.db
-*.tar.gz
+# *.tar.gz — removido para permitir icons.tar.gz

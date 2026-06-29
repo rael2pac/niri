@@ -310,6 +310,11 @@ if [ -n "$PENDRIVE" ]; then
       info "$cfg restaurado"
     fi
   done
+  if [ -f "$PENDRIVE/icons.tar.gz" ]; then
+    mkdir -p "$HOME/.local/share/icons"
+    tar -xzf "$PENDRIVE/icons.tar.gz" -C "$HOME/.local/share/icons"
+    ok "Ícones restaurados do pendrive"
+  fi
   quote
 fi
 
@@ -320,6 +325,11 @@ if [ ! -d "$HOME/.config/niri" ]; then
   echo ""
   git clone https://github.com/rael2pac/niri.git /tmp/niri-dotfiles
   cp -r /tmp/niri-dotfiles/.config/* "$HOME/.config/"
+  if [ -f /tmp/niri-dotfiles/icons.tar.gz ]; then
+    mkdir -p "$HOME/.local/share/icons"
+    tar -xzf /tmp/niri-dotfiles/icons.tar.gz -C "$HOME/.local/share/icons"
+    ok "Ícones restaurados do GitHub!"
+  fi
   rm -rf /tmp/niri-dotfiles
   ok "Configurações restauradas do GitHub!"
   quote
@@ -377,7 +387,26 @@ ok "Tema escuro aplicado — suave para os olhos"
 quote
 
 # ──────────────────────────────────────────────
-# 11. xdg-user-dirs
+# 11. Ícones
+# ──────────────────────────────────────────────
+step "🎨 Restaurando ícones..."
+ICONS_DIR="$HOME/.local/share/icons"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+if [ ! -d "$ICONS_DIR/Papirus-Dark" ]; then
+  if [ -f "$SCRIPT_DIR/icons.tar.gz" ]; then
+    mkdir -p "$ICONS_DIR"
+    tar -xzf "$SCRIPT_DIR/icons.tar.gz" -C "$ICONS_DIR"
+    ok "Ícones restaurados"
+  else
+    warn "icons.tar.gz não encontrado — ícones não serão instalados"
+  fi
+else
+  info "Ícones já existem, pulando"
+fi
+quote
+
+# ──────────────────────────────────────────────
+# 12. xdg-user-dirs
 # ──────────────────────────────────────────────
 step "📁 Configurando diretórios do usuário..."
 info "🔔 Criando Diretórios como Downloads, Documentos, Imagens..."
@@ -387,7 +416,7 @@ ok "Diretórios criados"
 
 
 # ──────────────────────────────────────────────
-# 12. Final — escolha do usuário
+# 13. Final — escolha do usuário
 # ──────────────────────────────────────────────
 clear 2>/dev/null || true
 echo -e "${GREEN}"
