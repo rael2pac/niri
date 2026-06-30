@@ -299,7 +299,7 @@ if [ -n "$PENDRIVE" ]; then
       ok "${archive%.tar.gz} restaurado"
     fi
   done
-  for cfg in fastfetch kitty fish gtk-3.0 gtk-4.0 qt5ct qt6ct fuzzel dolphinrc; do
+  for cfg in fastfetch kitty fish gtk-3.0 gtk-4.0 qt5ct qt6ct fuzzel; do
     if [ -f "$PENDRIVE/$cfg.tar.gz" ]; then
       tar -xzf "$PENDRIVE/$cfg.tar.gz" -C "$HOME/.config"
       info "$cfg restaurado"
@@ -311,17 +311,6 @@ if [ -n "$PENDRIVE" ]; then
     ok "Ícones restaurados do pendrive"
   fi
   quote
-fi
-
-# Fallback: copiar configs do diretório do script
-if [ -d "$(dirname "$0")/.config" ]; then
-  info "Copiando configs do diretório local..."
-  for cfg in dolphinrc; do
-    if [ -f "$(dirname "$0")/.config/$cfg" ]; then
-      cp "$(dirname "$0")/.config/$cfg" "$HOME/.config/$cfg"
-      ok "$cfg restaurado do diretório local"
-    fi
-  done
 fi
 
 # Fallback: clonar dotfiles do git automaticamente
@@ -381,7 +370,7 @@ write_gtk_dark() {
   cat > "$1" << 'EOF'
 [Settings]
 gtk-theme-name=adw-gtk3-dark
-gtk-icon-theme-name=Breeze-Chameleon-Devices
+gtk-icon-theme-name=BRC-Devices
 gtk-font-name=Adwaita Sans 11
 gtk-application-prefer-dark-theme=1
 gtk-xft-antialias=1
@@ -421,7 +410,7 @@ install_icon_theme() {
 }
 install_icon_theme "Breeze-Round-Chameleon Dark" "Breeze-Round-Chameleon-Dark.tar.gz" "Breeze-Round-Chameleon Dark Icons"
 install_icon_theme "KrystalSVG-Devices" "KrystalSVG-Devices.tar.gz" "KrystalSVG-Devices"
-install_icon_theme "Breeze-Chameleon-Devices" "Breeze-Chameleon-Devices.tar.gz" "Breeze-Chameleon-Devices"
+install_icon_theme "BRC-Devices" "BRC-Devices.tar.gz" "BRC-Devices"
 
 command -v nwg-look &>/dev/null && nwg-look -a > /dev/null 2>&1 || true
 ok "Tema escuro aplicado — suave para os olhos"
