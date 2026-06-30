@@ -208,9 +208,6 @@ if pacman -Qi nautilus &>/dev/null; then
   sudo pacman -Rdd --noconfirm nautilus > /dev/null 2>&1 || true
   ok "nautilus removido"
 fi
-# Prevenir que nautilus seja reinstalado como dependência
-sudo sed -i '/^IgnorePkg/ s/$/ nautilus/' /etc/pacman.conf 2>/dev/null || \
-  echo "IgnorePkg = nautilus" | sudo tee -a /etc/pacman.conf > /dev/null
 quote
 
 # ──────────────────────────────────────────────
