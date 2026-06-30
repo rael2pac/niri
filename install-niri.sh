@@ -14,7 +14,7 @@ set -euo pipefail
 # ──────────────────────────────────────────────
 # Cores e funções
 # ──────────────────────────────────────────────
-RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'
+RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'; BLUE='\033[0;34m'
 CYAN='\033[0;36m'; MAG='\033[0;35m'; BOLD='\033[1m'; NC='\033[0m'
 
 step()  { echo -e "\n${MAG}▓${NC} ${BOLD}$1${NC}"; }
@@ -52,16 +52,19 @@ quote() {
 }
 
 banner() {
-  echo -e "${CYAN}"
-  echo ' ███╗   ██╗██╗██████╗ ██╗'
-  echo ' ████╗  ██║██║██╔══██╗██║'
-  echo ' ██╔██╗ ██║██║██████╔╝██║'
-  echo ' ██║╚██╗██║██║██╔══██╗██║'
-  echo ' ██║ ╚████║██║██║  ██║██║'
-  echo ' ╚═╝  ╚═══╝╚═╝╚═╝  ╚═╝╚═╝'
+  echo ""
+  echo -e "  ${RED}███╗   ██╗${GREEN}██╗${YELLOW}██████╗ ${BLUE}██╗"
+  echo -e "  ${RED}████╗  ██║${GREEN}██║${YELLOW}██╔══██╗${BLUE}██║"
+  echo -e "  ${RED}██╔██╗ ██║${GREEN}██║${YELLOW}██████╔╝${BLUE}██║"
+  echo -e "  ${RED}██║╚██╗██║${GREEN}██║${YELLOW}██╔══██╗${BLUE}██║"
+  echo -e "  ${RED}██║ ╚████║${GREEN}██║${YELLOW}██║  ██║${BLUE}██║"
+  echo -e "  ${RED}╚═╝  ╚═══╝${GREEN}╚═╝${YELLOW}╚═╝  ╚═╝${BLUE}╚═╝"
   echo -e "${NC}"
-echo -e "  ${CYAN}Niri + Noctalia-shell — Instalação${NC}"
-echo -e "  ${YELLOW}By Rael2pac 🚀${NC}"
+  echo -e "  ${CYAN}▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓${NC}"
+  echo -e "  ${CYAN}▓${NC}        ${BOLD}Niri + Noctalia-shell${NC}          ${CYAN}▓${NC}"
+  echo -e "  ${CYAN}▓${NC}     ${YELLOW}Instalação Completa — Arch Linux${NC}    ${CYAN}▓${NC}"
+  echo -e "  ${CYAN}▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓${NC}"
+  echo -e "  ${MAG}✦${NC}  ${BOLD}By Rael2pac${NC}  ${MAG}✦${NC}"
   echo ""
   quote
   echo ""
