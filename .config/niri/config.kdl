@@ -61,8 +61,8 @@ spawn-at-startup "xwayland-satellite"
 spawn-at-startup "qs" "-c" "noctalia-shell"
 // Reconstrói cache de serviços KDE (Dolphin, Kate, etc.)
 // Caminho absoluto para garantir que funcione independente do PATH do Niri
-//spawn-at-startup "/usr/bin/kbuildsycoca6" "--noincremental"
-spawn-at-startup "kbuildsycoca6 --noincremental"
+//spawn-at-startup "kbuildsycoca6 --noincremental"
+spawn-at-startup "/usr/bin/kbuildsycoca6" "--noincremental"
 
 prefer-no-csd
 
