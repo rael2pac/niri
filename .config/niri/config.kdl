@@ -5,9 +5,15 @@ include "noctalia.kdl"
 environment {
     QT_QPA_PLATFORM "wayland"
     QT_QPA_PLATFORMTHEME "qt6ct"
-
+    GTK_APPLICATION_PREFER_DARK_THEME "1"
     XDG_MENU_PREFIX "arch-"
     DISPLAY ":0"
+
+    // Navegador padrão do sistema
+    // `xdg-open` e outros apps usam essa variável pra saber qual navegador chamar
+    BROWSER "firefox"
+    // BROWSER "chromium"
+    // BROWSER "brave-browser"
 }
 
 input {
@@ -29,6 +35,8 @@ layout {
 
     focus-ring {
         off
+
+        width 4
     }
 
     border {
@@ -56,13 +64,12 @@ layout {
 
 // XWayland via xwayland-satellite — necessário para apps X11 como Discord, Figma, etc.
 // Sem isso, apps X11 não abrem no Niri (que é Wayland puro).
-spawn-at-startup "dbus-update-activation-environment" "--systemd" "GTK_THEME=adw-gtk3-dark" "QT_QPA_PLATFORM=wayland" "QT_QPA_PLATFORMTHEME=qt6ct"
 spawn-at-startup "xwayland-satellite"
 spawn-at-startup "qs" "-c" "noctalia-shell"
 // Reconstrói cache de serviços KDE (Dolphin, Kate, etc.)
 // Caminho absoluto para garantir que funcione independente do PATH do Niri
-//spawn-at-startup "kbuildsycoca6 --noincremental"
-spawn-at-startup "/usr/bin/kbuildsycoca6" "--noincremental"
+//spawn-at-startup "/usr/bin/kbuildsycoca6" "--noincremental"
+spawn-at-startup "kbuildsycoca6 --noincremental"
 
 prefer-no-csd
 
