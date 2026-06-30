@@ -80,6 +80,19 @@ if [ "$EUID" -eq 0 ]; then
 fi
 
 # ──────────────────────────────────────────────
+# 1. Boas-vindas
+# ──────────────────────────────────────────────
+banner
+
+echo -e "  ${YELLOW}⚠${NC} Este script irá transformar seu Arch recém-instalado"
+echo -e "     em um ambiente Niri + Noctalia Shell completo."
+echo -e "  ${YELLOW}⚠${NC} Certifique-se de estar conectado à internet."
+echo ""
+echo -n "  ${CYAN}⌨${NC} Pressione ENTER para iniciar a instalação... "
+read -r
+echo ""
+
+# ──────────────────────────────────────────────
 # Verificar sudo
 # ──────────────────────────────────────────────
 if ! command -v sudo &>/dev/null; then
@@ -96,34 +109,6 @@ if ! sudo -v; then
   exit 1
 fi
 ok "Acesso sudo confirmado"
-
-# ──────────────────────────────────────────────
-# ███╗   ██╗██╗██████╗ ██╗
-# ████╗  ██║██║██╔══██╗██║
-# ██╔██╗ ██║██║██████╔╝██║
-# ██║╚██╗██║██║██╔══██╗██║
-# ██║ ╚████║██║██║  ██║██║
-# ╚═╝  ╚═══╝╚═╝╚═╝  ╚═╝╚═╝
- # ──────────────────────────────────────────────
- #  Niri + Noctalia-shell — Instalação Completa
- #  By Rael2pac
- # ──────────────────────────────────────────────
-#  De uma instalação mínima do Arch ao seu
-#  ambiente desktop completo em Wayland.
-# ──────────────────────────────────────────────
-
-# ──────────────────────────────────────────────
-# 1. Boas-vindas
-# ──────────────────────────────────────────────
-banner
-
-echo -e "  ${YELLOW}⚠${NC} Este script irá transformar seu Arch recém-instalado"
-echo -e "     em um ambiente Niri + Noctalia Shell completo."
-echo -e "  ${YELLOW}⚠${NC} Certifique-se de estar conectado à internet."
-echo ""
-echo -n "  ${CYAN}⌨${NC} Pressione ENTER para iniciar a instalação... "
-read -r
-echo ""
 
 # ──────────────────────────────────────────────
 # 2. Detectar pendrive com configs
