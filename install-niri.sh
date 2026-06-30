@@ -420,9 +420,8 @@ quote
 # 11. Dolphin padrão (xdg-mime)
 # ──────────────────────────────────────────────
 step "🐬 Definindo Dolphin como gerenciador padrão..."
-info "Associando pastas, arquivos e lixeira ao Dolphin..."
+info "Associando pastas ao Dolphin..."
 xdg-mime default org.kde.dolphin.desktop inode/directory
-xdg-mime default org.kde.dolphin.desktop x-scheme-handler/file
 xdg-mime default org.kde.dolphin.desktop x-scheme-handler/trash
 ok "Dolphin é o padrão — abrir pasta = Dolphin"
 quote
