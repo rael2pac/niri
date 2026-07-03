@@ -71,12 +71,11 @@ layout {
 // Sem isso, apps X11 não abrem no Niri (que é Wayland puro).
 spawn-at-startup "xwayland-satellite"
 spawn-at-startup "qs" "-c" "noctalia-shell"
-// Reconstrói cache de serviços KDE (Dolphin, Kate, etc.) em modo incremental
-// Sem --noincremental para preservar associações existentes e evitar que
-// o "Abrir com..." do Dolphin desapareça no startup.
+// Reconstrói cache de serviços KDE (Dolphin, Kate, etc.)
+// --noincremental para reconstruir do zero (garante associações corretas).
+// O cache ksycoca6 é protegido pela limpeza do plugin arch-updater-rael.
 // Caminho absoluto para garantir que funcione independente do PATH do Niri
-spawn-at-startup "/usr/bin/kbuildsycoca6"
-// ──────────────────────────────────────────────────────────────────────────────
+spawn-at-startup "/usr/bin/kbuildsycoca6" "--noincremental"
 // PROPAGAÇÃO DE VARIÁVEIS DE AMBIENTE PARA O SYSTEMD/DBUS
 // ──────────────────────────────────────────────────────────────────────────────
 // O block `environment {}` do Niri SÓ afeta processos que ele spawna diretamente
