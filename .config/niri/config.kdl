@@ -3,7 +3,12 @@
 include "noctalia.kdl"
 
 environment {
+    // Força Qt a rodar como Wayland nativo (em vez de XWayland)
     QT_QPA_PLATFORM "wayland"
+    // Define o mecanismo de tema Qt como qt6ct (gerencia tema escuro do Dolphin/KDE)
+    // ATENÇÃO: esta variável SÓ funciona para processos que o Niri spawna diretamente
+    // (ex: Mod+E). Para xdg-open/portals/DBus, ela precisa ser importada pro systemd
+    // via `spawn-at-startup "systemctl" "--user" "import-environment" "QT_QPA_PLATFORMTHEME"`
     QT_QPA_PLATFORMTHEME "qt6ct"
     GTK_APPLICATION_PREFER_DARK_THEME "1"
     XDG_MENU_PREFIX "arch-"
@@ -66,10 +71,25 @@ layout {
 // Sem isso, apps X11 não abrem no Niri (que é Wayland puro).
 spawn-at-startup "xwayland-satellite"
 spawn-at-startup "qs" "-c" "noctalia-shell"
-// Reconstrói cache de serviços KDE (Dolphin, Kate, etc.)
+// Reconstrói cache de serviços KDE (Dolphin, Kate, etc.) em modo incremental
+// Sem --noincremental para preservar associações existentes e evitar que
+// o "Abrir com..." do Dolphin desapareça no startup.
 // Caminho absoluto para garantir que funcione independente do PATH do Niri
-//spawn-at-startup "/usr/bin/kbuildsycoca6" "--noincremental"
-spawn-at-startup "kbuildsycoca6 --noincremental"
+spawn-at-startup "/usr/bin/kbuildsycoca6"
+// ──────────────────────────────────────────────────────────────────────────────
+// PROPAGAÇÃO DE VARIÁVEIS DE AMBIENTE PARA O SYSTEMD/DBUS
+// ──────────────────────────────────────────────────────────────────────────────
+// O block `environment {}` do Niri SÓ afeta processos que ele spawna diretamente
+// (ex: atalhos de teclado como Mod+E). Quando um app como Telegram usa xdg-open
+// para abrir o Dolphin, a ativação vai via portal → DBus activation, que consulta
+// o systemd user manager — NÃO o environment do Niri.
+//
+// Este comando importa a variável QT_QPA_PLATFORMTHEME do ambiente do Niri para
+// o systemd user manager na inicialização. Assim, qualquer processo ativado via
+// DBus (xdg-open, portais, etc.) herda a configuração de tema escuro do Qt.
+// ──────────────────────────────────────────────────────────────────────────────
+spawn-at-startup "systemctl" "--user" "import-environment" "QT_QPA_PLATFORMTHEME"
+//spawn-at-startup "kbuildsycoca6 --noincremental"
 
 prefer-no-csd
 
@@ -152,7 +172,7 @@ window-rule {
 }
 
 window-rule {
-    geometry-corner-radius 10
+    geometry-corner-radius 12
     clip-to-geometry true
 }
 
