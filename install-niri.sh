@@ -182,7 +182,7 @@ OFFICIAL_PACKAGES=(
   breeze breeze5 breeze-icons breeze-gtk qt5ct
   satty cpio vulkan-tools imagemagick
   bluez bluez-hid2hci bluez-tools bluez-utils bluez-deprecated-tools
-  blueman libldac libfdk-aac xwayland-satellite
+  blueman libldac libfdk-aac xwayland-satellite xorg-xhost
   pipewire pipewire-pulse pipewire-alsa pipewire-audio wireplumber
   grim slurp wl-clipboard fuzzel playerctl brightnessctl libnotify
   linux-lts-headers linux-zen-headers
@@ -345,6 +345,28 @@ info "Substituindo caminhos de /home/rael/ para $HOME/"
 find "$HOME/.config" -type f \( -name "*.json" -o -name "*.conf" -o -name "bookmarks" \) \
   -exec sed -i "s|/home/rael/|$HOME/|g" {} + 2>/dev/null || true
 ok "Caminhos ajustados para $USER"
+quote
+
+# ──────────────────────────────────────────────
+# 8c. Wrapper gufw (pkexec + dark theme)
+# ──────────────────────────────────────────────
+step "🛡️ Configurando wrapper gufw..."
+
+mkdir -p "$HOME/.local/bin"
+
+cat > "$HOME/.local/bin/gufw" << 'GUFWEOF'
+#!/bin/bash
+pkexec env DISPLAY="$DISPLAY" XAUTHORITY="$XAUTHORITY" GTK_THEME="adw-gtk3-dark" /usr/bin/gufw-pkexec "$(whoami)"
+GUFWEOF
+chmod +x "$HOME/.local/bin/gufw"
+
+# Garantir ~/.local/bin no PATH (se não estiver)
+if ! echo "$PATH" | tr ':' '\n' | grep -q "$HOME/.local/bin"; then
+  warn "~/.local/bin não está no PATH. Adicione ao ~/.bash_profile ou ~/.config/fish/config.fish"
+  info "Exemplo: echo 'export PATH=\"\$HOME/.local/bin:\$PATH\"' >> ~/.bash_profile"
+fi
+
+ok "gufw wrapper criado em ~/.local/bin/gufw"
 quote
 
 # ──────────────────────────────────────────────

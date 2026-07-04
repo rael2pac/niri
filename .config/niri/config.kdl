@@ -67,9 +67,9 @@ layout {
     default-column-width { proportion 0.5; }
 }
 
-// XWayland via xwayland-satellite — necessário para apps X11 como Discord, Figma, etc.
-// Sem isso, apps X11 não abrem no Niri (que é Wayland puro).
-spawn-at-startup "xwayland-satellite"
+// xwayland-satellite é iniciado automaticamente pelo niri desde a versão 25.08
+// Permite root usar o display X11 (necessário para gufw e outros apps com pkexec/sudo)
+spawn-at-startup "xhost" "+SI:localuser:root"
 spawn-at-startup "qs" "-c" "noctalia-shell"
 // Reconstrói cache de serviços KDE (Dolphin, Kate, etc.)
 // --noincremental para reconstruir do zero (garante associações corretas).
