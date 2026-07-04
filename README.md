@@ -8,6 +8,7 @@ Configurações pessoais para meu ambiente Arch Linux com:
 - **Tema:** Escuro (adw-gtk3-dark, Breeze Dark)
 - **SDDM:** Astronaut Theme
 - **Fastfetch:** Config personalizada
+- **Firewall:** UFW + GUFW funcionando out-of-the-box (com wrapper para pkexec + dark theme)
 
 ## Instalação
 
