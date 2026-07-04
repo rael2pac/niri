@@ -402,9 +402,9 @@ fi
 quote
 
 # ──────────────────────────────────────────────
-# 8e. UFW — liberar tráfego do libvirt (VMs)
+# 8e. UFW — liberar tráfego do libvirt + Waydroid
 # ──────────────────────────────────────────────
-step "🔓 Configurando UFW para libvirt..."
+step "🔓 Configurando UFW para libvirt + Waydroid..."
 
 if command -v ufw &>/dev/null; then
   # Libera forwarding na bridge virbr0 (NAT das VMs)
@@ -412,11 +412,19 @@ if command -v ufw &>/dev/null; then
   sudo ufw route allow out on virbr0 2>/dev/null || true
   sudo ufw route allow from 192.168.122.0/24 2>/dev/null || true
   sudo ufw route allow to 192.168.122.0/24 2>/dev/null || true
-  ok "Regras UFW para libvirt adicionadas — VMs com internet"
+
+  # Waydroid — DNS, DHCP e forward na waydroid0
+  sudo ufw allow 53 2>/dev/null || true
+  sudo ufw allow 67 2>/dev/null || true
+  sudo ufw route allow in on waydroid0 2>/dev/null || true
+  sudo ufw route allow out on waydroid0 2>/dev/null || true
+
+  ok "Regras UFW adicionadas — libvirt e Waydroid com internet"
 else
-  warn "UFW não encontrado. Se instalar depois, rode manualmente:"
-  info "  sudo ufw route allow in on virbr0"
-  info "  sudo ufw route allow out on virbr0"
+  warn "UFW não encontrado. Se instalar depois, rode:"
+  info "  sudo ufw route allow in on virbr0 && sudo ufw route allow out on virbr0"
+  info "  sudo ufw allow 53 && sudo ufw allow 67"
+  info "  sudo ufw route allow in on waydroid0 && sudo ufw route allow out on waydroid0"
 fi
 quote
 
