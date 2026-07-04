@@ -383,6 +383,25 @@ ok "Desktop file criado em ~/.local/share/applications/gufw.desktop"
 quote
 
 # ──────────────────────────────────────────────
+# 8d. Hook do pacman — reconstruir cache KDE automaticamente
+# ──────────────────────────────────────────────
+step "⚡ Configurando hook do Pacman para cache KDE..."
+
+if [ -d "/tmp/niri-dotfiles/etc/pacman.d/hooks" ]; then
+  sudo mkdir -p /etc/pacman.d/hooks
+  sudo cp /tmp/niri-dotfiles/etc/pacman.d/hooks/* /etc/pacman.d/hooks/
+  ok "Hook instalado — cache KDE atualizado a cada instalação/remoção de pacotes"
+else
+  SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+  if [ -f "$SCRIPT_DIR/etc/pacman.d/hooks/kde-cache.hook" ]; then
+    sudo mkdir -p /etc/pacman.d/hooks
+    sudo cp "$SCRIPT_DIR/etc/pacman.d/hooks/kde-cache.hook" /etc/pacman.d/hooks/
+    ok "Hook instalado — cache KDE atualizado a cada instalação/remoção de pacotes"
+  fi
+fi
+quote
+
+# ──────────────────────────────────────────────
 # 9. Ativar serviços
 # ──────────────────────────────────────────────
 step "⚡ Ativando serviços do sistema..."

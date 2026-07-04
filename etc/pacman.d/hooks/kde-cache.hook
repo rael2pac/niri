@@ -1,0 +1,11 @@
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Operation = Remove
+Type = Package
+Target = *
+
+[Action]
+Description = Reconstruindo cache KDE (kbuildsycoca6)...
+When = PostTransaction
+Exec = /usr/bin/kbuildsycoca6 --noincremental
