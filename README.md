@@ -98,6 +98,8 @@ nwg-look
 Escolha o tema, clique em **Apply** — propaga na hora para todos os apps.
 O daemon `xsettingsd` já está rodando no startup pra isso funcionar.
 
+> ⚠️ **No qt6ct/qt5ct**, escolha um tema de ícone que esteja **instalado no sistema**. Temas que não existem podem causar ícones quebrados no Kate, Dolphin e outros apps Qt. Os temas disponíveis são: `Breeze_Dark_RC`, `Breeze_RC`, `BRC-Devices` e os padrões do sistema (`breeze-dark`, `breeze`, `Adwaita`).
+
 ### Dolphin — "Abrir com" sempre funcionando
 
 No Niri (Wayland), o cache do KDE (`ksycoca6`) pode ficar desatualizado depois de instalar programas novos, fazendo o "Abrir com" do Dolphin parar de funcionar.
