@@ -351,7 +351,7 @@ ok "Caminhos ajustados para $USER"
 quote
 
 # ──────────────────────────────────────────────
-# 8c. Wrapper gufw (GTK_THEME via sudo SETENV)
+# 8c. Wrapper gufw (pkexec + xhost + tema escuro)
 # ──────────────────────────────────────────────
 step "🛡️ Configurando wrapper gufw (tema escuro)..."
 
@@ -359,7 +359,8 @@ mkdir -p "$HOME/.local/bin"
 
 cat > "$HOME/.local/bin/gufw" << 'GUFWEOF'
 #!/bin/bash
-sudo GTK_THEME="adw-gtk3-dark" /usr/bin/gufw-pkexec "$(whoami)"
+xhost +SI:localuser:root
+pkexec env DISPLAY="$DISPLAY" XAUTHORITY="$XAUTHORITY" GTK_THEME="adw-gtk3-dark" /usr/bin/gufw-pkexec "$(whoami)"
 GUFWEOF
 chmod +x "$HOME/.local/bin/gufw"
 
@@ -374,12 +375,7 @@ Terminal=false
 Type=Application
 Categories=GNOME;GTK;Settings;Security;
 GUFWDESKTOP
-ok "gufw wrapper criado (tema escuro + pede senha normalmente)"
-
-# Sudoers SETENV (sem NOPASSWD) — permite GTK_THEME sem pular senha
-echo "%wheel ALL=(ALL:ALL) SETENV: /usr/bin/gufw-pkexec" | sudo tee /etc/sudoers.d/gufw > /dev/null
-sudo chmod 440 /etc/sudoers.d/gufw
-ok "Sudoers SETENV configurado para gufw-pkexec"
+ok "gufw wrapper criado (xhost + pkexec + tema escuro)"
 quote
 
 # ──────────────────────────────────────────────

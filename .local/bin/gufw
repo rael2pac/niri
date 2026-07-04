@@ -1,2 +1,3 @@
 #!/bin/bash
-sudo GTK_THEME="adw-gtk3-dark" /usr/bin/gufw-pkexec "$(whoami)"
+xhost +SI:localuser:root
+pkexec env DISPLAY="$DISPLAY" XAUTHORITY="$XAUTHORITY" GTK_THEME="adw-gtk3-dark" /usr/bin/gufw-pkexec "$(whoami)"
