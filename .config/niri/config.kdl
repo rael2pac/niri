@@ -70,6 +70,9 @@ layout {
 // xwayland-satellite é iniciado automaticamente pelo niri desde a versão 25.08
 // Permite root usar o display X11 (necessário para gufw e outros apps com pkexec/sudo)
 spawn-at-startup "xhost" "+SI:localuser:root"
+// xsettingsd — propaga tema de ícone, fonte e cursor globalmente
+// Necessário para o nwg-look funcionar sem abrir manualmente
+spawn-at-startup "xsettingsd"
 spawn-at-startup "qs" "-c" "noctalia-shell"
 // Reconstrói cache de serviços KDE (Dolphin, Kate, etc.)
 // --noincremental para reconstruir do zero (garante associações corretas).
