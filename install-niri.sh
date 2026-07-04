@@ -433,6 +433,23 @@ fi
 quote
 
 # ──────────────────────────────────────────────
+# 8f. Garantir polkit-gnome no config.kdl
+# ──────────────────────────────────────────────
+step "🔑 Garantindo polkit-gnome no config.kdl..."
+
+CONFIG_KDL="$HOME/.config/niri/config.kdl"
+POLKIT_SPAWN='spawn-at-startup "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"'
+
+if ! grep -qF "$POLKIT_SPAWN" "$CONFIG_KDL" 2>/dev/null; then
+  # Adiciona depois da linha do xsettingsd
+  sed -i '/spawn-at-startup "xsettingsd"/a\'"$POLKIT_SPAWN" "$CONFIG_KDL"
+  ok "polkit-gnome adicionado ao config.kdl"
+else
+  ok "polkit-gnome já está no config.kdl"
+fi
+quote
+
+# ──────────────────────────────────────────────
 # 9. Ativar serviços
 # ──────────────────────────────────────────────
 step "⚡ Ativando serviços do sistema..."
