@@ -87,6 +87,8 @@ sudo ufw route allow in on waydroid0
 sudo ufw route allow out on waydroid0
 ```
 
+> **🛡️ GUFW (Firewall)** — O GUFW abre com tema escuro e pede senha normalmente (polkit). Funciona em **máquinas físicas** com Niri + XWayland. Pode não funcionar em VMs ou ambientes sem X11. O script instala e configura tudo automaticamente.
+
 ### Tema de ícones
 
 Se quiser mudar o tema de ícones:
