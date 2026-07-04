@@ -359,13 +359,9 @@ mkdir -p "$HOME/.local/bin"
 
 cat > "$HOME/.local/bin/gufw" << 'GUFWEOF'
 #!/bin/bash
-sudo /usr/bin/gufw-pkexec "$(whoami)"
+sudo GTK_THEME="adw-gtk3-dark" /usr/bin/gufw-pkexec "$(whoami)"
 GUFWEOF
 chmod +x "$HOME/.local/bin/gufw"
-
-# Copia pra /usr/local/bin (tem precedência sobre /usr/bin/gufw)
-sudo cp "$HOME/.local/bin/gufw" /usr/local/bin/gufw
-sudo chmod 755 /usr/local/bin/gufw
 
 # Garantir ~/.local/bin no PATH (se não estiver)
 if ! echo "$PATH" | tr ':' '\n' | grep -q "$HOME/.local/bin"; then
@@ -389,7 +385,7 @@ GUFWDESKTOP
 ok "Desktop file criado em ~/.local/share/applications/gufw.desktop"
 
 # Sudoers NOPASSWD para gufw-pkexec (evita pedir senha)
-echo "%wheel ALL=(ALL:ALL) NOPASSWD: /usr/bin/gufw-pkexec" | sudo tee /etc/sudoers.d/gufw > /dev/null
+echo "%wheel ALL=(ALL:ALL) NOPASSWD: SETENV: /usr/bin/gufw-pkexec" | sudo tee /etc/sudoers.d/gufw > /dev/null
 sudo chmod 440 /etc/sudoers.d/gufw
 ok "Sudoers NOPASSWD configurado para gufw-pkexec"
 quote
