@@ -180,6 +180,7 @@ OFFICIAL_PACKAGES=(
   nwg-displays polkit-gnome wiremix network-manager-applet
   alsa-utils ffmpeg ffmpegthumbs ffmpegthumbnailer
   breeze breeze5 breeze-icons breeze-gtk qt5ct
+  ufw gufw ufw-extras
   satty cpio vulkan-tools imagemagick
   bluez bluez-hid2hci bluez-tools bluez-utils bluez-deprecated-tools
   blueman libldac libfdk-aac xwayland-satellite xorg-xhost
