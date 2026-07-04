@@ -18,6 +18,7 @@ Perfeito para quem quer um Arch bonito, funcional e pronto para o dia a dia sem 
 | **Áudio** | PipeWire + WirePlumber |
 | **Bluetooth** | BlueZ + Blueman |
 | **Firewall** | UFW + GUFW (funcionando com tema escuro e sem erros de display) |
+| **Cache KDE** | Hook automático do pacman — "Abrir com" do Dolphin sempre funciona |
 | **Ícones** | BRC-Devices, Breeze-Round-Chameleon Dark (trocável pelo nwg-look) |
 | **Fontes** | JetBrains Mono, Meslo, Hack, FiraCode, Fantasque (Nerd Fonts) |
 
@@ -81,6 +82,12 @@ nwg-look
 Escolha o tema, clique em **Apply** — propaga na hora para todos os apps.
 O daemon `xsettingsd` já está rodando no startup pra isso funcionar.
 
+### Dolphin — "Abrir com" sempre funcionando
+
+No Niri (Wayland), o cache do KDE (`ksycoca6`) pode ficar desatualizado depois de instalar programas novos, fazendo o "Abrir com" do Dolphin parar de funcionar.
+
+**Solução:** O script instala um **hook do pacman** (`/etc/pacman.d/hooks/kde-cache.hook`) que roda `kbuildsycoca6 --noincremental` automaticamente toda vez que você instala, atualiza ou remove qualquer pacote. Ou seja, o cache do KDE é sempre reconstruído na hora — sem precisar reiniciar, sem rodar comando manual, sem perder as associações de arquivo.
+
 ### Configurar teclado
 
 O layout padrão é `br` (ABNT2). Para trocar, edite `~/.config/niri/config.kdl` na seção `input`:
@@ -118,6 +125,8 @@ niri/
 ├── .local/
 │   ├── bin/gufw                       ← Wrapper do firewall (pkexec + dark)
 │   └── share/applications/gufw.desktop ← Atalho do firewall
+├── etc/
+│   └── pacman.d/hooks/kde-cache.hook  ← Hook pra cache KDE sempre atualizado
 └── README.md
 ```
 
