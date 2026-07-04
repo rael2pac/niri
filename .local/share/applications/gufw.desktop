@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Firewall Configuration
+Exec=$HOME/.local/bin/gufw
+Icon=gufw
+Terminal=false
+Type=Application
+Categories=GNOME;GTK;Settings;Security;
