@@ -367,6 +367,19 @@ if ! echo "$PATH" | tr ':' '\n' | grep -q "$HOME/.local/bin"; then
 fi
 
 ok "gufw wrapper criado em ~/.local/bin/gufw"
+
+# Desktop file override — garante que o lançador use o wrapper
+mkdir -p "$HOME/.local/share/applications"
+cat > "$HOME/.local/share/applications/gufw.desktop" << GUFWDESKTOP
+[Desktop Entry]
+Name=Firewall Configuration
+Exec=$HOME/.local/bin/gufw
+Icon=gufw
+Terminal=false
+Type=Application
+Categories=GNOME;GTK;Settings;Security;
+GUFWDESKTOP
+ok "Desktop file criado em ~/.local/share/applications/gufw.desktop"
 quote
 
 # ──────────────────────────────────────────────
