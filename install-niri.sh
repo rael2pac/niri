@@ -402,6 +402,25 @@ fi
 quote
 
 # ──────────────────────────────────────────────
+# 8e. UFW — liberar tráfego do libvirt (VMs)
+# ──────────────────────────────────────────────
+step "🔓 Configurando UFW para libvirt..."
+
+if command -v ufw &>/dev/null; then
+  # Libera forwarding na bridge virbr0 (NAT das VMs)
+  sudo ufw route allow in on virbr0 2>/dev/null || true
+  sudo ufw route allow out on virbr0 2>/dev/null || true
+  sudo ufw route allow from 192.168.122.0/24 2>/dev/null || true
+  sudo ufw route allow to 192.168.122.0/24 2>/dev/null || true
+  ok "Regras UFW para libvirt adicionadas — VMs com internet"
+else
+  warn "UFW não encontrado. Se instalar depois, rode manualmente:"
+  info "  sudo ufw route allow in on virbr0"
+  info "  sudo ufw route allow out on virbr0"
+fi
+quote
+
+# ──────────────────────────────────────────────
 # 9. Ativar serviços
 # ──────────────────────────────────────────────
 step "⚡ Ativando serviços do sistema..."

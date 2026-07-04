@@ -71,6 +71,17 @@ Já funciona pronto. Para abrir:
 
 Vai abrir em **modo escuro** e sem erro de display.
 
+**Importante:** Se for usar máquinas virtuais (virt-manager/libvirt), o UFW bloqueia o tráfego das VMs por padrão. O script de instalação já libera automaticamente. Se instalou o UFW depois, rode:
+
+```bash
+sudo ufw route allow in on virbr0
+sudo ufw route allow out on virbr0
+sudo ufw route allow from 192.168.122.0/24
+sudo ufw route allow to 192.168.122.0/24
+```
+
+> Funciona tanto para rede NAT quanto bridge (`virbr0`, `br0`, etc.) — o princípio é o mesmo: liberar o forward na interface da ponte.
+
 ### Tema de ícones
 
 Se quiser mudar o tema de ícones:
