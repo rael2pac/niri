@@ -359,7 +359,7 @@ mkdir -p "$HOME/.local/bin"
 
 cat > "$HOME/.local/bin/gufw" << 'GUFWEOF'
 #!/bin/bash
-sudo env DISPLAY="$DISPLAY" XAUTHORITY="$XAUTHORITY" GTK_THEME="adw-gtk3-dark" /usr/bin/gufw-pkexec "$(whoami)"
+sudo -E GTK_THEME="adw-gtk3-dark" /usr/bin/gufw-pkexec "$(whoami)"
 GUFWEOF
 chmod +x "$HOME/.local/bin/gufw"
 
@@ -386,7 +386,10 @@ ok "Desktop file criado em ~/.local/share/applications/gufw.desktop"
 
 # Sudoers NOPASSWD para gufw-pkexec (evita pedir senha)
 if ! [ -f /etc/sudoers.d/gufw ]; then
-  echo "%wheel ALL=(ALL) NOPASSWD: /usr/bin/gufw-pkexec" | sudo tee /etc/sudoers.d/gufw > /dev/null
+  {
+    echo "Defaults env_keep += \"DISPLAY XAUTHORITY\""
+    echo "%wheel ALL=(ALL) NOPASSWD: /usr/bin/gufw-pkexec"
+  } | sudo tee /etc/sudoers.d/gufw > /dev/null
   sudo chmod 440 /etc/sudoers.d/gufw
   ok "Sudoers NOPASSWD configurado para gufw-pkexec"
 else
