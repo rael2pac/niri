@@ -387,6 +387,7 @@ ok "Desktop file criado em ~/.local/share/applications/gufw.desktop"
 # Sudoers NOPASSWD para gufw-pkexec (evita pedir senha)
 if ! [ -f /etc/sudoers.d/gufw ]; then
   {
+    echo 'Defaults!/usr/bin/gufw-pkexec env_keep += "DISPLAY WAYLAND_DISPLAY XAUTHORITY"'
     echo "%wheel ALL=(ALL:ALL) NOPASSWD: SETENV: /usr/bin/gufw-pkexec"
   } | sudo tee /etc/sudoers.d/gufw > /dev/null
   sudo chmod 440 /etc/sudoers.d/gufw
