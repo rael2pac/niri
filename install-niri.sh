@@ -342,9 +342,11 @@ fi
 # 8b. Corrigir caminhos absolutos para o usuário atual
 # ──────────────────────────────────────────────
 step "🔄 Adaptando configs para seu usuário..."
-info "Substituindo caminhos de /home/rael/ para $HOME/"
+info "Substituindo caminhos de /home/rael/ e ~ para o usuário atual"
 find "$HOME/.config" -type f \( -name "*.json" -o -name "*.conf" -o -name "bookmarks" \) \
   -exec sed -i "s|/home/rael/|$HOME/|g" {} + 2>/dev/null || true
+find "$HOME/.config" -type f -name "*.conf" \
+  -exec sed -i "s|^color_scheme_path=~|color_scheme_path=$HOME|" {} + 2>/dev/null || true
 ok "Caminhos ajustados para $USER"
 quote
 
