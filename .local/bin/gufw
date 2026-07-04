@@ -1,2 +1,0 @@
-#!/bin/bash
-sudo GTK_THEME="adw-gtk3-dark" /usr/bin/gufw-pkexec "$(whoami)"

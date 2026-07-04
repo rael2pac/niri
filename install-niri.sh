@@ -351,46 +351,6 @@ ok "Caminhos ajustados para $USER"
 quote
 
 # ──────────────────────────────────────────────
-# 8c. Wrapper gufw (sudo + dark theme)
-# ──────────────────────────────────────────────
-step "🛡️ Configurando wrapper gufw..."
-
-mkdir -p "$HOME/.local/bin"
-
-cat > "$HOME/.local/bin/gufw" << 'GUFWEOF'
-#!/bin/bash
-sudo GTK_THEME="adw-gtk3-dark" /usr/bin/gufw-pkexec "$(whoami)"
-GUFWEOF
-chmod +x "$HOME/.local/bin/gufw"
-
-# Garantir ~/.local/bin no PATH (se não estiver)
-if ! echo "$PATH" | tr ':' '\n' | grep -q "$HOME/.local/bin"; then
-  warn "~/.local/bin não está no PATH. Adicione ao ~/.bash_profile ou ~/.config/fish/config.fish"
-  info "Exemplo: echo 'export PATH=\"\$HOME/.local/bin:\$PATH\"' >> ~/.bash_profile"
-fi
-
-ok "gufw wrapper criado em ~/.local/bin/gufw"
-
-# Desktop file override — garante que o lançador use o wrapper
-mkdir -p "$HOME/.local/share/applications"
-cat > "$HOME/.local/share/applications/gufw.desktop" << GUFWDESKTOP
-[Desktop Entry]
-Name=Firewall Configuration
-Exec=$HOME/.local/bin/gufw
-Icon=gufw
-Terminal=false
-Type=Application
-Categories=GNOME;GTK;Settings;Security;
-GUFWDESKTOP
-ok "Desktop file criado em ~/.local/share/applications/gufw.desktop"
-
-# Sudoers NOPASSWD para gufw-pkexec (evita pedir senha)
-echo "%wheel ALL=(ALL:ALL) NOPASSWD: SETENV: /usr/bin/gufw-pkexec" | sudo tee /etc/sudoers.d/gufw > /dev/null
-sudo chmod 440 /etc/sudoers.d/gufw
-ok "Sudoers NOPASSWD configurado para gufw-pkexec"
-quote
-
-# ──────────────────────────────────────────────
 # 8d. Hook do pacman — reconstruir cache KDE automaticamente
 # ──────────────────────────────────────────────
 step "⚡ Configurando hook do Pacman para cache KDE..."
