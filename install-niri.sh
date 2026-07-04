@@ -359,6 +359,7 @@ mkdir -p "$HOME/.local/bin"
 
 cat > "$HOME/.local/bin/gufw" << 'GUFWEOF'
 #!/bin/bash
+xhost +SI:localuser:root
 pkexec env DISPLAY="$DISPLAY" XAUTHORITY="$XAUTHORITY" GTK_THEME="adw-gtk3-dark" /usr/bin/gufw-pkexec "$(whoami)"
 GUFWEOF
 chmod +x "$HOME/.local/bin/gufw"

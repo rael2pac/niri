@@ -73,6 +73,11 @@ spawn-at-startup "xhost" "+SI:localuser:root"
 // xsettingsd — propaga tema de ícone, fonte e cursor globalmente
 // Necessário para o nwg-look funcionar sem abrir manualmente
 spawn-at-startup "xsettingsd"
+// Agente de autenticação PolKit (GNOME)
+// Substitui o polkit-agent do Noctalia (plugin QML que só funciona com Noctalia v4)
+// Necessário para gufw, gnome-disk-utility e outros apps que usam pkexec
+// Funciona independente do shell, portável para qualquer setup
+spawn-at-startup "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
 spawn-at-startup "qs" "-c" "noctalia-shell"
 // Reconstrói cache de serviços KDE (Dolphin, Kate, etc.)
 // --noincremental para reconstruir do zero (garante associações corretas).
