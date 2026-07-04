@@ -363,6 +363,10 @@ sudo /usr/bin/gufw-pkexec "$(whoami)"
 GUFWEOF
 chmod +x "$HOME/.local/bin/gufw"
 
+# Copia pra /usr/local/bin (tem precedência sobre /usr/bin/gufw)
+sudo cp "$HOME/.local/bin/gufw" /usr/local/bin/gufw
+sudo chmod 755 /usr/local/bin/gufw
+
 # Garantir ~/.local/bin no PATH (se não estiver)
 if ! echo "$PATH" | tr ':' '\n' | grep -q "$HOME/.local/bin"; then
   warn "~/.local/bin não está no PATH. Adicione ao ~/.bash_profile ou ~/.config/fish/config.fish"
