@@ -351,7 +351,7 @@ ok "Caminhos ajustados para $USER"
 quote
 
 # ──────────────────────────────────────────────
-# 8c. Wrapper gufw (pkexec + dark theme)
+# 8c. Wrapper gufw (sudo + dark theme)
 # ──────────────────────────────────────────────
 step "🛡️ Configurando wrapper gufw..."
 
@@ -359,8 +359,7 @@ mkdir -p "$HOME/.local/bin"
 
 cat > "$HOME/.local/bin/gufw" << 'GUFWEOF'
 #!/bin/bash
-xhost +SI:localuser:root
-pkexec env DISPLAY="$DISPLAY" XAUTHORITY="$XAUTHORITY" GTK_THEME="adw-gtk3-dark" /usr/bin/gufw-pkexec "$(whoami)"
+sudo env DISPLAY="$DISPLAY" XAUTHORITY="$XAUTHORITY" GTK_THEME="adw-gtk3-dark" /usr/bin/gufw-pkexec "$(whoami)"
 GUFWEOF
 chmod +x "$HOME/.local/bin/gufw"
 
@@ -384,6 +383,15 @@ Type=Application
 Categories=GNOME;GTK;Settings;Security;
 GUFWDESKTOP
 ok "Desktop file criado em ~/.local/share/applications/gufw.desktop"
+
+# Sudoers NOPASSWD para gufw-pkexec (evita pedir senha)
+if ! [ -f /etc/sudoers.d/gufw ]; then
+  echo "%wheel ALL=(ALL) NOPASSWD: /usr/bin/gufw-pkexec" | sudo tee /etc/sudoers.d/gufw > /dev/null
+  sudo chmod 440 /etc/sudoers.d/gufw
+  ok "Sudoers NOPASSWD configurado para gufw-pkexec"
+else
+  ok "Sudoers já configurado para gufw"
+fi
 quote
 
 # ──────────────────────────────────────────────
