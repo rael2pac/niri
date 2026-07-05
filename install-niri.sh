@@ -395,6 +395,9 @@ else
     ok "Hook instalado — cache KDE atualizado a cada instalação/remoção de pacotes"
   fi
 fi
+# Substituir usuário hardcoded pelo usuário atual no hook
+sudo sed -i "s|runuser -u rael|runuser -u $USER|g" /etc/pacman.d/hooks/kde-cache.hook 2>/dev/null || true
+sudo sed -i "s|/home/rael/|/home/$USER/|g" /etc/pacman.d/hooks/kde-cache.hook 2>/dev/null || true
 quote
 
 # ──────────────────────────────────────────────

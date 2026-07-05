@@ -3,9 +3,16 @@ Operation = Install
 Operation = Upgrade
 Operation = Remove
 Type = Package
-Target = *
+Target = kservice
+Target = kconfig
+Target = kio
+Target = knewstuff
+Target = kparts
+Target = kfilemetadata
+Target = plasma-framework
+Target = kded
 
 [Action]
 Description = Reconstruindo cache KDE (kbuildsycoca6)...
 When = PostTransaction
-Exec = /usr/bin/kbuildsycoca6 --noincremental
+Exec = /bin/sh -c 'rm -f /home/rael/.cache/ksycoca6_* && runuser -u rael /usr/bin/kbuildsycoca6 --noincremental 2>/dev/null || true'
