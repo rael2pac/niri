@@ -15,4 +15,4 @@ Target = kded
 [Action]
 Description = Reconstruindo cache KDE (kbuildsycoca6)...
 When = PostTransaction
-Exec = /bin/sh -c 'rm -f /home/rael/.cache/ksycoca6_* && runuser -u rael /usr/bin/kbuildsycoca6 --noincremental 2>/dev/null || true'
+Exec = /bin/sh -c 'for d in /home/*; do [ -d "$d" ] && rm -f "$d/.cache/ksycoca6_"* && runuser -u "$(basename "$d")" /usr/bin/kbuildsycoca6 --noincremental 2>/dev/null; done'
