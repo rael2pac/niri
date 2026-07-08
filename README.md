@@ -18,7 +18,7 @@ Perfeito para quem quer um Arch bonito, funcional e pronto para o dia a dia sem 
 | **Áudio** | PipeWire + WirePlumber |
 | **Bluetooth** | BlueZ + Blueman |
 | **Firewall** | UFW + GUFW (funcionando com tema escuro e sem erros de display) |
-| **Cache KDE** | kded6 + environment.d — "Abrir com" do Dolphin sempre funciona |
+| **Cache KDE** | Hook pós-transação + environment.d — "Abrir com" do Dolphin sempre funciona |
 | **Ícones** | BRC-Devices, Breeze-Round-Chameleon Dark (trocável pelo nwg-look) |
 | **Fontes** | JetBrains Mono, Meslo, Hack, FiraCode, Fantasque (Nerd Fonts) |
 
@@ -106,13 +106,16 @@ O daemon `xsettingsd` já está rodando no startup pra isso funcionar.
 
 No Niri (Wayland), o cache do KDE (`ksycoca6`) pode ficar desatualizado depois de instalar programas novos, fazendo o "Abrir com" do Dolphin parar de funcionar.
 
-**Solução completa (3 camadas):**
+**Solução (2 camadas):**
 
 | Camada | O que faz | Arquivo |
 |--------|-----------|---------|
-| **1. kded6** | Mantém o cache incremental em segundo plano | `~/.config/niri/config.kdl` (spawn-at-startup) |
+| **1. Hook do pacman** | Reconstrói o cache do zero após instalar/remover qualquer pacote | `/etc/pacman.d/hooks/kde-cache.hook` |
 | **2. environment.d** | Expõe vars Qt/KDE pro systemd/DBus desde o login | `~/.config/environment.d/*.conf` |
-| **3. Hook do pacman** | Reconstrói o cache do zero após instalar/remover qualquer pacote | `/etc/pacman.d/hooks/kde-cache.hook` |
+
+> O `kded6` foi **desativado** — ele sobrescrevia o cache recém-construído pelo hook
+> com uma atualização incremental que corrompia o `ksycoca6`. O hook + rebuild na
+> inicialização são suficientes.
 
 O hook roda `kbuildsycoca6 --noincremental` com as variáveis de ambiente corretas
 (`XDG_RUNTIME_DIR`, `DBUS_SESSION_BUS_ADDRESS`) para **todos os usuários**

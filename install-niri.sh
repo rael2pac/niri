@@ -187,7 +187,7 @@ OFFICIAL_PACKAGES=(
   pipewire pipewire-pulse pipewire-alsa pipewire-audio wireplumber
   grim slurp wl-clipboard fuzzel playerctl brightnessctl libnotify
   linux-lts-headers linux-zen-headers
-  nwg-look xsettingsd kded
+  nwg-look xsettingsd
   noto-fonts noto-fonts-emoji ttf-dejavu
   ntfs-3g exfatprogs dosfstools btrfs-progs xfsprogs
   jfsutils f2fs-tools udftools e2fsprogs gvfs
