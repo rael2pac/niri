@@ -103,7 +103,9 @@ spawn-at-startup "dbus-update-activation-environment" "--systemd" "--all"
 // (cache de serviços/aplicativos usado pelo Dolphin para associações de arquivo).
 // Sem ele, o kbuildsycoca6 --noincremental é necessário manualmente após cada
 // instalação/remoção de pacotes.
-spawn-at-startup "kded6"
+// DESATIVADO: conflita com o hook do pacman (kded6 sobrescrevia o cache
+// íntegro com atualização incremental corrompida após o hook rodar).
+// spawn-at-startup "kded6"
 // Reconstrói cache de serviços KDE (Dolphin, Kate, etc.) na inicialização.
 // --noincremental para reconstruir do zero (garante associações corretas).
 // O kded6 (acima) mantém o cache atualizado incrementalmente durante o uso.
