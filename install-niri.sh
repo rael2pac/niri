@@ -187,7 +187,7 @@ OFFICIAL_PACKAGES=(
   pipewire pipewire-pulse pipewire-alsa pipewire-audio wireplumber
   grim slurp wl-clipboard fuzzel playerctl brightnessctl libnotify
   linux-lts-headers linux-zen-headers
-  nwg-look xsettingsd
+  nwg-look xsettingsd kded
   noto-fonts noto-fonts-emoji ttf-dejavu
   ntfs-3g exfatprogs dosfstools btrfs-progs xfsprogs
   jfsutils f2fs-tools udftools e2fsprogs gvfs
@@ -379,22 +379,29 @@ ok "gufw wrapper criado (xhost + pkexec + tema escuro)"
 quote
 
 # ──────────────────────────────────────────────
-# 8d. Hook do pacman — reconstruir cache KDE automaticamente
+# 8d. Variáveis de ambiente para systemd (environment.d)
 # ──────────────────────────────────────────────
-step "⚡ Configurando hook do Pacman para cache KDE..."
+step "⚡ Configurando variáveis de ambiente para systemd/DBus..."
 
-if [ -d "/tmp/niri-dotfiles/etc/pacman.d/hooks" ]; then
-  sudo mkdir -p /etc/pacman.d/hooks
-  sudo cp /tmp/niri-dotfiles/etc/pacman.d/hooks/* /etc/pacman.d/hooks/
-  ok "Hook instalado — cache KDE atualizado a cada instalação/remoção de pacotes"
-else
-  SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-  if [ -f "$SCRIPT_DIR/etc/pacman.d/hooks/kde-cache.hook" ]; then
-    sudo mkdir -p /etc/pacman.d/hooks
-    sudo cp "$SCRIPT_DIR/etc/pacman.d/hooks/kde-cache.hook" /etc/pacman.d/hooks/
-    ok "Hook instalado — cache KDE atualizado a cada instalação/remoção de pacotes"
-  fi
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+mkdir -p "$HOME/.config/environment.d"
+
+if [ -f "$SCRIPT_DIR/.config/environment.d/01-xdg-base.conf" ]; then
+  cp "$SCRIPT_DIR/.config/environment.d/01-xdg-base.conf" "$HOME/.config/environment.d/"
+  # Ajusta $HOME para o usuário real
+  sed -i "s|\$HOME|$HOME|g" "$HOME/.config/environment.d/01-xdg-base.conf"
+  ok "01-xdg-base.conf criado — diretórios XDG"
 fi
+
+if [ -f "$SCRIPT_DIR/.config/environment.d/10-kde-on-niri.conf" ]; then
+  cp "$SCRIPT_DIR/.config/environment.d/10-kde-on-niri.conf" "$HOME/.config/environment.d/"
+  ok "10-kde-on-niri.conf criado — variáveis Qt/KDE para systemd"
+fi
+
+info "environment.d é lido pelo systemd --user no login. Essas variáveis"
+info "ficam disponíveis para portais, DBus activation e qualquer processo"
+info "iniciado pelo systemd, resolvendo o problema de tema e associações"
+info "do Dolphin sem precisar de hook do pacman."
 quote
 
 # ──────────────────────────────────────────────

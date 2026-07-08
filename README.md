@@ -18,7 +18,7 @@ Perfeito para quem quer um Arch bonito, funcional e pronto para o dia a dia sem 
 | **Áudio** | PipeWire + WirePlumber |
 | **Bluetooth** | BlueZ + Blueman |
 | **Firewall** | UFW + GUFW (funcionando com tema escuro e sem erros de display) |
-| **Cache KDE** | Hook automático do pacman — "Abrir com" do Dolphin sempre funciona |
+| **Cache KDE** | kded6 + environment.d — "Abrir com" do Dolphin sempre funciona |
 | **Ícones** | BRC-Devices, Breeze-Round-Chameleon Dark (trocável pelo nwg-look) |
 | **Fontes** | JetBrains Mono, Meslo, Hack, FiraCode, Fantasque (Nerd Fonts) |
 
@@ -106,7 +106,14 @@ O daemon `xsettingsd` já está rodando no startup pra isso funcionar.
 
 No Niri (Wayland), o cache do KDE (`ksycoca6`) pode ficar desatualizado depois de instalar programas novos, fazendo o "Abrir com" do Dolphin parar de funcionar.
 
-**Solução:** O script instala um **hook do pacman** (`/etc/pacman.d/hooks/kde-cache.hook`) que roda `kbuildsycoca6 --noincremental` automaticamente toda vez que você instala, atualiza ou remove qualquer pacote. Ou seja, o cache do KDE é sempre reconstruído na hora — sem precisar reiniciar, sem rodar comando manual, sem perder as associações de arquivo.
+**Solução definitiva:** O `kded6` (daemon de serviços KDE) é iniciado junto com o Niri e mantém o cache `ksycoca6` atualizado **incrementalmente** em segundo plano. Na inicialização, `kbuildsycoca6 --noincremental` roda uma vez para construir o cache do zero, e o `kded6` cuida do resto.
+
+Além disso, as variáveis de ambiente necessárias (`QT_QPA_PLATFORMTHEME`, `XDG_MENU_PREFIX`, etc.) são definidas em `~/.config/environment.d/`, que o `systemd --user` lê no login. Isso garante que portais, DBus activation e qualquer processo iniciado pelo systemd enxerguem as mesmas configurações — sem precisar de hook do pacman.
+
+**Arquivos envolvidos:**
+- `~/.config/environment.d/01-xdg-base.conf` — diretórios XDG
+- `~/.config/environment.d/10-kde-on-niri.conf` — variáveis Qt/KDE
+- `~/.config/niri/config.kdl` — spawn do `kded6` + `dbus-update-activation-environment --systemd --all`
 
 ### Configurar teclado
 
@@ -141,12 +148,13 @@ niri/
 │   ├── gtk-3.0/ gtk-4.0/             ← Tema escuro do GTK
 │   ├── qt5ct/ qt6ct/                  ← Tema escuro do Qt
 │   ├── nwg-look/                      ← Config do seletor de temas
+│   ├── environment.d/                 ← Variáveis de ambiente para systemd
+│   │   ├── 01-xdg-base.conf           ← Diretórios XDG
+│   │   └── 10-kde-on-niri.conf        ← Qt/KDE vars (tema, prefixo, etc.)
 │   └── ...
 ├── .local/
 │   ├── bin/gufw                       ← Wrapper do firewall (pkexec + dark)
 │   └── share/applications/gufw.desktop ← Atalho do firewall
-├── etc/
-│   └── pacman.d/hooks/kde-cache.hook  ← Hook pra cache KDE sempre atualizado
 └── README.md
 ```
 

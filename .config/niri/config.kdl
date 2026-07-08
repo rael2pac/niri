@@ -7,11 +7,14 @@ environment {
     QT_QPA_PLATFORM "wayland"
     // Define o mecanismo de tema Qt como qt6ct (gerencia tema escuro do Dolphin/KDE)
     // ATENÇÃO: esta variável SÓ funciona para processos que o Niri spawna diretamente
-    // (ex: Mod+E). Para xdg-open/portals/DBus, ela precisa ser importada pro systemd
-    // via `spawn-at-startup "systemctl" "--user" "import-environment" "QT_QPA_PLATFORMTHEME"`
+    // (ex: Mod+E). Para xdg-open/portals/DBus, ela precisa ser propagada pro systemd
+    // via `dbus-update-activation-environment --systemd --all` (feito abaixo).
+    // As variáveis em ~/.config/environment.d/ garantem que o systemd --user as veja
+    // desde o login, antes mesmo do Niri iniciar.
     QT_QPA_PLATFORMTHEME "qt6ct"
     GTK_APPLICATION_PREFER_DARK_THEME "1"
     XDG_MENU_PREFIX "arch-"
+    XDG_CURRENT_DESKTOP "niri"
     DISPLAY ":0"
 
     // Navegador padrão do sistema
@@ -79,11 +82,6 @@ spawn-at-startup "xsettingsd"
 // Funciona independente do shell, portável para qualquer setup
 spawn-at-startup "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
 spawn-at-startup "qs" "-c" "noctalia-shell"
-// Reconstrói cache de serviços KDE (Dolphin, Kate, etc.)
-// --noincremental para reconstruir do zero (garante associações corretas).
-// O cache ksycoca6 é protegido pela limpeza do plugin arch-updater-rael.
-// Caminho absoluto para garantir que funcione independente do PATH do Niri
-spawn-at-startup "/usr/bin/kbuildsycoca6" "--noincremental"
 // PROPAGAÇÃO DE VARIÁVEIS DE AMBIENTE PARA O SYSTEMD/DBUS
 // ──────────────────────────────────────────────────────────────────────────────
 // O block `environment {}` do Niri SÓ afeta processos que ele spawna diretamente
@@ -91,12 +89,26 @@ spawn-at-startup "/usr/bin/kbuildsycoca6" "--noincremental"
 // para abrir o Dolphin, a ativação vai via portal → DBus activation, que consulta
 // o systemd user manager — NÃO o environment do Niri.
 //
-// Este comando importa a variável QT_QPA_PLATFORMTHEME do ambiente do Niri para
-// o systemd user manager na inicialização. Assim, qualquer processo ativado via
-// DBus (xdg-open, portais, etc.) herda a configuração de tema escuro do Qt.
+// `dbus-update-activation-environment --systemd --all` importa TODAS as variáveis
+// do ambiente do Niri para o systemd user manager + DBus activation environment.
+// Necessário para que portais, xdg-open, e apps ativados por DBus herdem as
+// variáveis (QT_QPA_PLATFORMTHEME, XDG_MENU_PREFIX, etc.).
+//
+// IMPORTANTE (Noctalia/Quickshell): Deve vir ANTES do kded6 para evitar conflito
+// do system tray — o kded6 sobrescreve o tray do Quickshell se for iniciado sem
+// as variáveis de ambiente propagadas primeiro.
 // ──────────────────────────────────────────────────────────────────────────────
-spawn-at-startup "systemctl" "--user" "import-environment" "QT_QPA_PLATFORMTHEME"
-//spawn-at-startup "kbuildsycoca6 --noincremental"
+spawn-at-startup "dbus-update-activation-environment" "--systemd" "--all"
+// kded6 — Daemon de serviços KDE. Mantém o ksycoca6 atualizado
+// (cache de serviços/aplicativos usado pelo Dolphin para associações de arquivo).
+// Sem ele, o kbuildsycoca6 --noincremental é necessário manualmente após cada
+// instalação/remoção de pacotes.
+spawn-at-startup "kded6"
+// Reconstrói cache de serviços KDE (Dolphin, Kate, etc.) na inicialização.
+// --noincremental para reconstruir do zero (garante associações corretas).
+// O kded6 (acima) mantém o cache atualizado incrementalmente durante o uso.
+// Caminho absoluto para garantir que funcione independente do PATH do Niri
+spawn-at-startup "/usr/bin/kbuildsycoca6" "--noincremental"
 
 prefer-no-csd
 
