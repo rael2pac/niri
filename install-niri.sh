@@ -408,7 +408,6 @@ quote
 # ──────────────────────────────────────────────
 step "⚡ Instalando hook do Pacman para cache KDE..."
 
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 if [ -f "$SCRIPT_DIR/etc/pacman.d/hooks/kde-cache.hook" ]; then
   sudo mkdir -p /etc/pacman.d/hooks
   sudo cp "$SCRIPT_DIR/etc/pacman.d/hooks/kde-cache.hook" /etc/pacman.d/hooks/
