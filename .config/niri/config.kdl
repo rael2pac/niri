@@ -200,7 +200,7 @@ binds {
 
     Mod+T { spawn "kitty"; }
     Mod+D { spawn-sh "fish -c noctalia-r"; }
-    Mod+E { spawn "dolphin"; }
+    Mod+E { spawn-sh "kbuildsycoca6 --noincremental 2>/dev/null; dolphin"; }
     Super+Alt+L { spawn "swaylock"; }
 
     Super+Alt+S allow-when-locked=true { spawn-sh "pkill orca || exec orca"; }
