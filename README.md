@@ -106,14 +106,17 @@ O daemon `xsettingsd` já está rodando no startup pra isso funcionar.
 
 No Niri (Wayland), o cache do KDE (`ksycoca6`) pode ficar desatualizado depois de instalar programas novos, fazendo o "Abrir com" do Dolphin parar de funcionar.
 
-**Solução definitiva:** O `kded6` (daemon de serviços KDE) é iniciado junto com o Niri e mantém o cache `ksycoca6` atualizado **incrementalmente** em segundo plano. Na inicialização, `kbuildsycoca6 --noincremental` roda uma vez para construir o cache do zero, e o `kded6` cuida do resto.
+**Solução completa (3 camadas):**
 
-Além disso, as variáveis de ambiente necessárias (`QT_QPA_PLATFORMTHEME`, `XDG_MENU_PREFIX`, etc.) são definidas em `~/.config/environment.d/`, que o `systemd --user` lê no login. Isso garante que portais, DBus activation e qualquer processo iniciado pelo systemd enxerguem as mesmas configurações — sem precisar de hook do pacman.
+| Camada | O que faz | Arquivo |
+|--------|-----------|---------|
+| **1. kded6** | Mantém o cache incremental em segundo plano | `~/.config/niri/config.kdl` (spawn-at-startup) |
+| **2. environment.d** | Expõe vars Qt/KDE pro systemd/DBus desde o login | `~/.config/environment.d/*.conf` |
+| **3. Hook do pacman** | Reconstrói o cache do zero após instalar/remover qualquer pacote | `/etc/pacman.d/hooks/kde-cache.hook` |
 
-**Arquivos envolvidos:**
-- `~/.config/environment.d/01-xdg-base.conf` — diretórios XDG
-- `~/.config/environment.d/10-kde-on-niri.conf` — variáveis Qt/KDE
-- `~/.config/niri/config.kdl` — spawn do `kded6` + `dbus-update-activation-environment --systemd --all`
+O hook roda `kbuildsycoca6 --noincremental` com as variáveis de ambiente corretas
+(`XDG_RUNTIME_DIR`, `DBUS_SESSION_BUS_ADDRESS`) para **todos os usuários**
+do sistema, em **qualquer** transação do pacman (`Target = *`).
 
 ### Configurar teclado
 
@@ -155,6 +158,8 @@ niri/
 ├── .local/
 │   ├── bin/gufw                       ← Wrapper do firewall (pkexec + dark)
 │   └── share/applications/gufw.desktop ← Atalho do firewall
+├── etc/
+│   └── pacman.d/hooks/kde-cache.hook  ← Hook pós-transação do pacman
 └── README.md
 ```
 

@@ -400,12 +400,26 @@ fi
 
 info "environment.d é lido pelo systemd --user no login. Essas variáveis"
 info "ficam disponíveis para portais, DBus activation e qualquer processo"
-info "iniciado pelo systemd, resolvendo o problema de tema e associações"
-info "do Dolphin sem precisar de hook do pacman."
+info "iniciado pelo systemd."
 quote
 
 # ──────────────────────────────────────────────
-# 8e. UFW — liberar tráfego do libvirt + Waydroid
+# 8e. Hook do pacman — reconstruir cache KDE automaticamente
+# ──────────────────────────────────────────────
+step "⚡ Instalando hook do Pacman para cache KDE..."
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+if [ -f "$SCRIPT_DIR/etc/pacman.d/hooks/kde-cache.hook" ]; then
+  sudo mkdir -p /etc/pacman.d/hooks
+  sudo cp "$SCRIPT_DIR/etc/pacman.d/hooks/kde-cache.hook" /etc/pacman.d/hooks/
+  ok "Hook instalado — kbuildsycoca6 roda após toda transação do pacman"
+  info "Funciona para TODOS os usuários do sistema (usa loginctl + sudo -u)"
+  info "com as variáveis XDG_RUNTIME_DIR e DBUS_SESSION_BUS_ADDRESS corretas."
+fi
+quote
+
+# ──────────────────────────────────────────────
+# 8f. UFW — liberar tráfego do libvirt + Waydroid
 # ──────────────────────────────────────────────
 step "🔓 Configurando UFW para libvirt + Waydroid..."
 
