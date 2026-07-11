@@ -1,4 +1,0 @@
-[shell]
-# Gaming: envolve todos os apps launchados pelo Noctalia com PROTON_ENABLE_WAYLAND=1
-# Garante que Steam, Heroic e outros launchers recebam a variável automaticamente
-launch_apps_custom_command = "PROTON_ENABLE_WAYLAND=1 $CMD"

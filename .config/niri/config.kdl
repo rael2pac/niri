@@ -22,10 +22,6 @@ environment {
     BROWSER "firefox"
     // BROWSER "chromium"
     // BROWSER "brave-browser"
-
-    // Gaming: faz jogos via Proton rodarem como Wayland nativo
-    // Funciona com Proton-GE, Proton-CachyOS e variantes
-    PROTON_ENABLE_WAYLAND "1"
 }
 
 input {
@@ -103,8 +99,6 @@ spawn-at-startup "qs" "-c" "noctalia-shell"
 // as variáveis de ambiente propagadas primeiro.
 // ──────────────────────────────────────────────────────────────────────────────
 spawn-at-startup "dbus-update-activation-environment" "--systemd" "--all"
-// Gaming: propaga PROTON_ENABLE_WAYLAND para o systemd user session
-spawn-at-startup "sh" "-c" "systemctl --user set-environment PROTON_ENABLE_WAYLAND=1"
 // kded6 — Daemon de serviços KDE. Mantém o ksycoca6 atualizado
 // (cache de serviços/aplicativos usado pelo Dolphin para associações de arquivo).
 // Sem ele, o kbuildsycoca6 --noincremental é necessário manualmente após cada
