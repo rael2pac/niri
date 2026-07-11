@@ -379,7 +379,28 @@ ok "gufw wrapper criado (xhost + pkexec + tema escuro)"
 quote
 
 # ──────────────────────────────────────────────
-# 8d. Variáveis de ambiente para systemd (environment.d)
+# 8d. Noctalia — config.toml para gaming (PROTON_ENABLE_WAYLAND)
+# ──────────────────────────────────────────────
+step "🎮 Configurando PROTON_ENABLE_WAYLAND para gaming..."
+
+NOCTALIA_TOML="$HOME/.config/noctalia/config.toml"
+mkdir -p "$HOME/.config/noctalia"
+
+if [ -f "$SCRIPT_DIR/.config/noctalia/config.toml" ]; then
+  cp "$SCRIPT_DIR/.config/noctalia/config.toml" "$HOME/.config/noctalia/config.toml"
+  ok "config.toml do Noctalia copiado — launch_apps_custom_command ativo"
+else
+  cat > "$NOCTALIA_TOML" << 'EOF'
+[shell]
+launch_apps_custom_command = "PROTON_ENABLE_WAYLAND=1 $CMD"
+EOF
+  ok "config.toml do Noctalia criado — launch_apps_custom_command ativo"
+fi
+info "Steam e Heroic launchados pelo Noctalia herdam PROTON_ENABLE_WAYLAND=1 automaticamente"
+quote
+
+# ──────────────────────────────────────────────
+# 8e. Variáveis de ambiente para systemd (environment.d)
 # ──────────────────────────────────────────────
 step "⚡ Configurando variáveis de ambiente para systemd/DBus..."
 
@@ -404,7 +425,7 @@ info "iniciado pelo systemd."
 quote
 
 # ──────────────────────────────────────────────
-# 8e. Hook do pacman — reconstruir cache KDE automaticamente
+# 8f. Hook do pacman — reconstruir cache KDE automaticamente
 # ──────────────────────────────────────────────
 step "⚡ Instalando hook do Pacman para cache KDE..."
 
@@ -418,7 +439,7 @@ fi
 quote
 
 # ──────────────────────────────────────────────
-# 8f. UFW — liberar tráfego do libvirt + Waydroid
+# 8g. UFW — liberar tráfego do libvirt + Waydroid
 # ──────────────────────────────────────────────
 step "🔓 Configurando UFW para libvirt + Waydroid..."
 
@@ -445,7 +466,7 @@ fi
 quote
 
 # ──────────────────────────────────────────────
-# 8f. Garantir polkit-gnome no config.kdl
+# 8h. Garantir polkit-gnome no config.kdl
 # ──────────────────────────────────────────────
 step "🔑 Garantindo polkit-gnome no config.kdl..."
 
