@@ -6,7 +6,7 @@
     	"type": "kitty",
     	"height": 13,
     	"padding": {
-    		"top": 0
+    		"top": 1
     	}
     },
     "display": {
