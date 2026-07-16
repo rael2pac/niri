@@ -404,13 +404,15 @@ info "iniciado pelo systemd."
 quote
 
 # ──────────────────────────────────────────────
-# 8e. Script de montagem de drives (rclone) — opcional
+# 8e. Scripts de sistema (rclone mount, wofi menus, etc.)
 # ──────────────────────────────────────────────
-step "💾 Script de montagem de drives remotos (rclone)..."
+step "💾 Copiando scripts de sistema..."
 
 mkdir -p "$HOME/.config/systemd/user"
-cp "$SCRIPT_DIR/.config/systemd/user/mount-drive.service" "$HOME/.config/systemd/user/"
-ok "mount-drive.service copiado"
+if [ -f "$SCRIPT_DIR/.config/systemd/user/mount-drive.service" ]; then
+  cp "$SCRIPT_DIR/.config/systemd/user/mount-drive.service" "$HOME/.config/systemd/user/"
+  ok "mount-drive.service copiado — para ativar: bash setup-rclone.sh"
+fi
 
 mkdir -p "$HOME/.config/scripts"
 for scr in "$SCRIPT_DIR"/.config/scripts/*.sh; do
@@ -419,32 +421,15 @@ for scr in "$SCRIPT_DIR"/.config/scripts/*.sh; do
 done
 ok "scripts copiados e com permissão de execução"
 
-if command -v rclone &>/dev/null; then
-  info "rclone detectado — deseja ATIVAR a montagem automática dos drives no login?"
-  echo -n "  [1] Sim, ativar agora   [2] Não, vou configurar depois  [3] Ignorar  "
-  read -r choice
-  case "$choice" in
-    1)
-      systemctl --user daemon-reload
-      systemctl --user enable --now mount-drive.service && ok "Montagem automática ativada!" || warn "Falha ao ativar serviço"
-      ;;
-    2)
-      info "Para ativar depois: systemctl --user enable --now mount-drive.service"
-      ;;
-    *)
-      warn "Ignorando montagem automática"
-      ;;
-  esac
-else
-  warn "rclone não está instalado. O serviço foi copiado mas NÃO ativado."
-  info "Instale o rclone com: sudo pacman -S rclone"
-  info "Depois configure: rclone config"
-  info "E ative: systemctl --user enable --now mount-drive.service"
+if [ -d "$SCRIPT_DIR/.config/wofi" ]; then
+  mkdir -p "$HOME/.config/wofi"
+  cp "$SCRIPT_DIR/.config/wofi/style.css" "$HOME/.config/wofi/"
+  ok "wofi style copiado"
 fi
 quote
 
 # ──────────────────────────────────────────────
-# 8e. Hook do pacman — reconstruir cache KDE automaticamente
+# 8f. Hook do pacman — reconstruir cache KDE automaticamente
 # ──────────────────────────────────────────────
 step "⚡ Instalando hook do Pacman para cache KDE..."
 
