@@ -12,15 +12,15 @@
         }
     ],
     "states": {
-        "467130:arch-updater": {
+        "2dab22:arch-updater-rael": {
             "enabled": true,
             "sourceUrl": "https://github.com/rael2pac/Noctalia-plugins-rael"
         },
-        "467130:controller-battery": {
+        "2dab22:controller-battery": {
             "enabled": true,
             "sourceUrl": "https://github.com/rael2pac/Noctalia-plugins-rael"
         },
-        "467130:hdmi-toggle": {
+        "2dab22:hdmi-toggle": {
             "enabled": true,
             "sourceUrl": "https://github.com/rael2pac/Noctalia-plugins-rael"
         },
