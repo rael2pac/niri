@@ -1,50 +1,44 @@
 #!/usr/bin/env bash
-# Configura rclone + montagem automática dos drives remotos MEUS
+# setup-rclone-rael.sh — MEU script pessoal
 # Uso: bash setup-rclone-rael.sh
-# Script pessoal do rael2pac — contém tokens rclone
+# Instala rclone, cria pastas, monta drives automaticamente
 
 set -euo pipefail
 
 RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'; CYAN='\033[0;36m'; BOLD='\033[1m'; NC='\033[0m'
 
-step()  { echo -e "\n  ${CYAN}━━━ ${BOLD}$1${NC}"; }
-info()  { echo -e "  ${CYAN}→${NC} $1"; }
+step()  { echo -e "  ${CYAN}━━━ ${BOLD}$1${NC}"; }
 ok()    { echo -e "  ${GREEN}✔${NC} $1"; }
 warn()  { echo "  ${YELLOW}⚠${NC} $1"; }
 
-step "📦 Instalando rclone..."
+step "Installing rclone..."
 sudo pacman -S --needed --noconfirm rclone
-ok "rclone instalado"
+ok "rclone installed"
 
-step "🔧 Copiando configuração dos drives..."
+step "Copying rclone.conf..."
+RCLONE_B64="W0dkcml2ZV0KdHlwZSA9IGRyaXZlCnNjb3BlID0gZHJpdmUKdG9rZW4gPSB7ImFjY2Vzc190b2tlbiI6InlhMjkuYTBBUkdudTBaaVNiTFVHUEhXUjFBYUN4cXE1dmFQbGVEYk5VcUFyMlNUc3c3MjdTdFpVc0MzbnJSUHJjdk5lTWhGNW5XUHlyMW43SEhBN3FjWjRfQk1SUFpIb0o0UV9BemZBdmlBWWV3MHZ6VkJVQzBzREROeG9NTG5vWWRxQXI5MVdCdmUtdUc0UnlWbFpOdVFfbGwzWi1JVDR3dWpUVFhyaDNoVGlSRU9kNlVTazJfUTdvNElsSmFHMzhtdWM3Zm1nVjlKQlJVYUNnWUtBVWtTQVJRU0ZRSEdYMk1pZVhLNXpNX1l5Z2lpTGotQU1WNmxHUTAyMDYiLCJ0b2tlbl90eXBlIjoiQmVhcmVyIiwicmVmcmVzaF90b2tlbiI6IjEvLzBoc3RxVGJoZDJhRU9DZ1lJQVJBQUdCRVNOd0YtTDlJcl9rT21zSlduTEdxakswLTdoN0xQcENGcUdKbkJJcnFfeW5mVGNHdDFUTUFPR0NzUjlIalQ4WS1TeEZHem03blU4SEUiLCJleHBpcnkiOiIyMDI2LTA3LTE2VDEyOjAzOjE4LjEyMDM0Nzk1LTAzOjAwIiwiZXhwaXJlc19pbiI6MzU5OX0KdGVhbV9kcml2ZSA9IAoKW01lZ2FdCnR5cGUgPSBtZWdhCnVzZXIgPSByYWVsMnBhY0BnbWFpbC5jb20KcGFzcyA9IGVkOTF5NXJtSmVYQTc5cXBONDc2T2RtR2lZa3pQLXFqMkFwZApzZXNzaW9uX2lkID0gY0hteDhwOFZYaXhnR2NEdVNxcUpjR0kyTVVSYVdYSlRkVFJCX2FMRnlpNVduQ3hVcThRMndXdFNKQQptYXN0ZXJfa2V5ID0gZUNIZzd4Mi9FU05TQWlMSGV4aWdsQT09CgpbT25lZHJpdmVdCnR5cGUgPSBvbmVkcml2ZQp0b2tlbiA9IHsiYWNjZXNzX3Rva2VuIjoiRXdCWUJNbDZCQUFVOUJhdGxnTXh0czJUMUI1ZTNNdWNnZnM0amNBQUFkQnhiL2ZnWDhvS3dxbGNjM0xMMnZwMmI0QjZaTEpJVzdZaTRwbkRtSVBnUi9wY3I0VURVdDF0eTdITzhyem91NGp6MlR2cHVoak5NcStLSjRlN0wvV1hYNFZNdDdDNmlSWnRkb3lLeFJYaVVjd3NOUlZSeFRJd2p6VXdpbEhKRkRKL0M5clR6SURkc2wxaVkvZmNaSnY3TGpZTlpKTksxQUduQ3c2M0EzUDJtUEhYcFhlQ2FYckt6dC9RMEluOERUa1ZudWUwOTl2N05qbDF6UzVEd3ozblV6dEFxbkMwRFNRbHFIc2gwWnJZVE9DQVk3UURIcE5VNEJJSjhiOWkrWFp5bkxiSVVOL3FrdUh6ejBpek8rMndBNk1GRDV6QkNyOHdGa25iSHhDc2o5dUc3QzdSdmFWL0dTVTF0QUpwVjdJSVltUWF0UUg5SEk0UzU4VHNqQk1RWmdBQUVFT3RqVjBYT2pXUDRsQ1hxMmVObFhnZ0ExbG5Qek00UkZ5TEduZng5RUJiMFN5R1JMekF6THB4NVB5bXdRSzNCK1A5RkRZMjF6RXNnRTk2TG9wZ0pHTHVIQ0wyQmZKUEdPV09NZWxOZ3BaaGdVVkVlU3YrNHNEOW5VbERnSmlBVVBvZGRXV2YweFQ0cmNpcktvbkRhS0hQeXdtc056VlpsK3pEa01rLzJOcVRFTFZHOHJTVWlqa2FMUUJuSE5rbk1KbTZVT05RQkFJL1RoQVFGQ3Vhd0djVHQ4aW9ObVlhMFZObzRLeFcwb1h3YTQvdkxDamJuVkpwdGdTWVA5bFNnbHVEa05EeWlGbzMya2Z3V0djaTVwZC9oQ0taMzhCSjZ5WVc4ZTVSbFRyM0dZQXlENWFwM1dxYlpVTlZ1aW5PZ2hid0hvOXJQM1VObTA1eEl5c2RWSVd3YlNPNG9wMC9JaEx6d2ZqeS9MbWtDQTQyTTI4ZlJ0OGM4MnBnc0NEclJZeDlGSkNzWERmdUpxUGdRb1FNM1Y1ejYrMGtBM1hjMk0zclNZN3BGSG51aGVYNENjcFF3ckhKTytkL2I2d25FVTFhc09qTEFiVmVXRmxjYmlaU0RIY2c5NW1NZVVlUGsvLzBkNW9aWWxwbVZSMStyR3M3a0Z6VmtNSHhYN24yM0oxNE1Jc1VPckJiTmxZT2JFYlZkYXBzSXdoZ3pQMUt2bHNaVmZhMmFybUQ3L0lSSE93bVdIWVRYcTJpaC9scDR5cmpPcU5yT2pMQmxlWUttU0VVaGtNWTg5cmdUQjZFK2tNMEU4VmovSEJCaWt6YUZDZGlaYnc0Tm5leWdGRk1aMXdGMTRQZ1IrSERrdkk2RVhialpYeFRUQVkwWEZNRWp2d2RnZE45dmErNlVDV3JCb0liQUxQOVI2dEt2WVlSeHNhcy83Z3RmOFVLL1RxeHVreGdwNHZUZlhIOTMxMEl4NnpRMndjTE96eThpMXcwb3FLM2dPR28wOTVraGx0b3l4d0k1VGF3eUZJeCs1cFJadTFpMGxaeDBLU21HWTRPa2ZtYUt5RElGbTJNcWw3RTZrNEwxQ3ZKZEY3MXpKRXlnYlJQMGhQb0tOaE1SZVNiMUV1TzAxZUEyS0lmb05OeFE0UCszWjN4dW0zd3VqNFI2Z01CS25OcGVYUWpnMjF1R3RpODJmNDRwNFNXTTlpd1IxeE0zbW9XdWx0OEQ1MXZDVlZJSUpIRXhMaTRESlJnSFJPNUNMa29NY05ITGhhL2M1R3o2TGFTT0ErZS9nLy9HVndHbkN3Ylk5ZFl2TWJJWUJxei9RUU1wZHpISHE4RGMrcUlkbmc4RHI2dFBEczdvK3JqQUpsU2ZnYWVMNzd5NGduS25IaXZRSXkwWGN0a1p3WS9Tb1RjeUgzOUNja0Q3WDNqdzdIY2NNYTdHNTMvazQxZ1VRTT0iLCJ0b2tlbl90eXBlIjoiQmVhcmVyIiwicmVmcmVzaF90b2tlbiI6Ik0uQzU0MF9TTjEuMC5VLk1zYUFydGlmYWN0cy4tQ2k1UUpFZXdoSktRdGc5UTRON2k4OG93bHRaV3ExUlVPT2NvUkMwZ1dFR1ZRUU1RYjdveUQxUDZSSmVrWEI0ZldvMlEhS1FOVW1RSlpMU3k2MmsydllMY0F4OUxLa0V3d0p4WWVXVzNYYk1VSWNwTmNqY3Qhdnl6RFlzaEVVRU1QOXAzNUhyQSE4IVFnd1VoNDR4WjYqWFdqdG1pOUJZajhXODFTRXRVKkVwVDJJcHB0MEZ2KldkWjVRT1paMG5OZzlhbGxhKjRRZ2lhb3hPYno3cHg1VTRqSk55MjAzaHUqdDRpRGRpQVBSWWxZSlNqN2MzQjNXY1pZZyExaWhwMzhPV21xdkcwTFZrVzZWNDR2T1VjdGs2NjNWIVJwIVJtYkJSMVN1ODFhWHpEMUhCMUxia2pOMlVqdjU1RU56QjNpMGhoRVVRSExrRjc1elRXdipOU2JUNlA1ckJvQWEzc3hMRWtHbkJ2UzkqOXQ3RGlxIVdDeUVSaVpobiFzOWUzOGckJCIsImV4cGlyeSI6IjIwMjYtMDctMTZUMTI6MTI6MzQuOTAzMjc1OTUtMDM6MDAiLCJleHBpcmVzX2luIjozNTk5fQpkcml2ZV9pZCA9IDJDNzczODUxOTM1RERDOTkKZHJpdmVfdHlwZSA9IHBlcnNvbmFsCgo="
 mkdir -p "$HOME/.config/rclone"
-cp "$HOME/.config/rclone/rclone.conf" "$HOME/.config/rclone/rclone.conf" 2>/dev/null || {
-  warn "rclone.conf não encontrado em ~/.config/rclone/rclone.conf"
-  info "Copie manualmente antes de rodar ou configure com: rclone config"
-}
-ok "rclone.conf copiado (tokens pessoais)"
+echo "$RCLONE_B64" | base64 -d > "$HOME/.config/rclone/rclone.conf"
+ok "rclone.conf copied"
 
-step "📁 Criando pastas de montagem..."
+step "Creating mount dirs..."
 mkdir -p "$HOME/Rclone/Gdrive" "$HOME/Rclone/Mega" "$HOME/Rclone/Onedrive"
-ok "Pastas criadas"
+ok "dirs created"
 
-if [ -f "scripts/mount_drive.sh" ]; then
+step "Copying service and scripts..."
+if [ -f "$(dirname "$0")/scripts/mount_drive.sh" ] && [ -d "$(dirname "$0")/.config/systemd/user" ]; then
   mkdir -p "$HOME/.config/scripts"
-  cp scripts/*.sh "$HOME/.config/scripts/"
-  chmod +x "$HOME/.config/scripts/"*.sh
+  cp "$(dirname "$0")/scripts/mount_drive.sh" "$HOME/.config/scripts/"
+  chmod +x "$HOME/.config/scripts/mount_drive.sh"
   mkdir -p "$HOME/.config/systemd/user"
-  cp .config/systemd/user/mount-drive.service "$HOME/.config/systemd/user/"
-  systemctl --user daemon-reload
-  systemctl --user enable --now mount-drive.service
-  ok "Montagem automática ativada!"
-else
-  warn "scripts/mount_drive.sh não encontrado — pula cópia"
-  info "Copie manualmente e ative:"
-  info "  systemctl --user enable --now mount-drive.service"
+  cp "$(dirname "$0")/.config/systemd/user/mount-drive.service" "$HOME/.config/systemd/user/"
 fi
 
+systemctl --user daemon-reload
+systemctl --user enable --now mount-drive.service || true
+ok "mount service enabled"
+
 echo ""
-echo -e "  ${GREEN}✔${NC} Setup rclone-rael concluído!"
+echo "  Setup rclone-rael concluido!"
 echo ""
-echo "  Drives montados: Gdrive, Mega, Onedrive"
-echo "    systemctl --user status mount-drive.service"
+echo "  systemctl --user status mount-drive.service"
