@@ -17,6 +17,7 @@ thumbs.db
 
 # rclone config (tokens privados)
 .config/rclone/rclone.conf
+setup-rclone-rael.sh
 
 # tar.gz only allowed for shipped icon themes
 *.tar.gz
