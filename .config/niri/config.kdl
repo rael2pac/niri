@@ -7,10 +7,8 @@ environment {
     QT_QPA_PLATFORM "wayland"
     // Define o mecanismo de tema Qt como qt6ct (gerencia tema escuro do Dolphin/KDE)
     // ATENÇÃO: esta variável SÓ funciona para processos que o Niri spawna diretamente
-    // (ex: Mod+E). Para xdg-open/portals/DBus, ela precisa ser propagada pro systemd
-    // via `dbus-update-activation-environment --systemd --all` (feito abaixo).
-    // As variáveis em ~/.config/environment.d/ garantem que o systemd --user as veja
-    // desde o login, antes mesmo do Niri iniciar.
+    // (ex: Mod+E). Para xdg-open/portals/DBus, ela precisa ser importada pro systemd
+    // via `spawn-at-startup "systemctl" "--user" "import-environment" "QT_QPA_PLATFORMTHEME"`
     QT_QPA_PLATFORMTHEME "qt6ct"
     GTK_APPLICATION_PREFER_DARK_THEME "1"
     XDG_MENU_PREFIX "arch-"
@@ -22,6 +20,7 @@ environment {
     BROWSER "firefox"
     // BROWSER "chromium"
     // BROWSER "brave-browser"
+
 }
 
 input {
@@ -70,16 +69,15 @@ layout {
     default-column-width { proportion 0.5; }
 }
 
-// xwayland-satellite é iniciado automaticamente pelo niri desde a versão 25.08
+// XWayland via xwayland-satellite — necessário para apps X11 como Discord, Figma, etc.
+// Sem isso, apps X11 não abrem no Niri (que é Wayland puro).
 // Permite root usar o display X11 (necessário para gufw e outros apps com pkexec/sudo)
+// Soluciona "Authorization required, but no authorization protocol specified"
+// xwayland-satellite é iniciado automaticamente pelo niri desde a versão 25.08
 spawn-at-startup "xhost" "+SI:localuser:root"
 // xsettingsd — propaga tema de ícone, fonte e cursor globalmente
 // Necessário para o nwg-look funcionar sem abrir manualmente
 spawn-at-startup "xsettingsd"
-// Agente de autenticação PolKit (GNOME)
-// Substitui o polkit-agent do Noctalia (plugin QML que só funciona com Noctalia v4)
-// Necessário para gufw, gnome-disk-utility e outros apps que usam pkexec
-// Funciona independente do shell, portável para qualquer setup
 spawn-at-startup "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
 spawn-at-startup "qs" "-c" "noctalia-shell"
 // PROPAGAÇÃO DE VARIÁVEIS DE AMBIENTE PARA O SYSTEMD/DBUS
@@ -202,8 +200,8 @@ binds {
 
     Mod+T { spawn "kitty"; }
     Mod+D { spawn-sh "fish -c noctalia-r"; }
-    Mod+E { spawn "dolphin"; }
     Super+Alt+L { spawn "swaylock"; }
+    Mod+E { spawn "dolphin"; }
 
     Super+Alt+S allow-when-locked=true { spawn-sh "pkill orca || exec orca"; }
 
@@ -348,17 +346,19 @@ binds {
 
     Mod+W { toggle-column-tabbed-display; }
 
-    Print { spawn-sh "bash ~/.config/scripts/screenshot-screen.sh"; }
-    Shift+Print { spawn-sh "bash ~/.config/scripts/screenshot-timer.sh"; }
-    Ctrl+Print { spawn-sh "bash ~/.config/scripts/screenshot-area.sh"; }
-    Alt+Print { spawn-sh "bash ~/.config/scripts/screenshot-window.sh"; }
-    Super+Print { spawn-sh "bash ~/.config/scripts/screenshot-dual.sh"; }
+    Print { spawn-sh "bash $HOME/.config/scripts/screenshot-screen.sh"; }
+    Shift+Print { spawn-sh "bash $HOME/.config/scripts/screenshot-timer.sh"; }
+    Ctrl+Print { spawn-sh "bash $HOME/.config/scripts/screenshot-area.sh"; }
+    Alt+Print { spawn-sh "bash $HOME/.config/scripts/screenshot-window.sh"; }
+    Super+Print { spawn-sh "bash $HOME/.config/scripts/screenshot-dual.sh"; }
+    Mod+Shift+Print { spawn-sh "bash $HOME/.config/scripts/screenshot-menu.sh"; }
 
     Mod+Ctrl+S { spawn-sh "wl-paste | satty -f -"; }
     Mod+Ctrl+D { spawn-sh "wl-paste | swappy -f -"; }
 
-    Mod+Shift+M { spawn-sh "if niri msg outputs | grep -A1 '(HDMI-A-1)' | grep -q 'Current mode'; then niri msg output HDMI-A-1 off; else niri msg output HDMI-A-1 on; fi"; }
-    Mod+Shift+N { spawn-sh "if niri msg outputs | grep -A1 '(DP-1)' | grep -q 'Current mode'; then niri msg output DP-1 off; else niri msg output DP-1 on; fi"; }
+    Mod+Shift+0 { spawn-sh "bash $HOME/.config/scripts/monitor-menu.sh"; }
+    Mod+Shift+1 { spawn-sh "if niri msg outputs | grep -A1 '(DP-1)' | grep -q 'Current mode'; then niri msg output DP-1 off; else niri msg output DP-1 on; fi"; }
+    Mod+Shift+2 { spawn-sh "if niri msg outputs | grep -A1 '(HDMI-A-1)' | grep -q 'Current mode'; then niri msg output HDMI-A-1 off; else niri msg output HDMI-A-1 on; fi"; }
     Mod+Shift+E { quit; }
     Ctrl+Alt+Delete { quit; }
 

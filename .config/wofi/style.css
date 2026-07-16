@@ -1,0 +1,59 @@
+* {
+  font-family: "JetBrains Mono", "Noto Sans", sans-serif;
+  font-size: 14px;
+}
+
+window {
+  margin: 0;
+  border: 2px solid #89b4fa;
+  border-radius: 16px;
+  background-color: rgba(30, 30, 46, 0.85);
+}
+
+#input {
+  margin: 12px;
+  padding: 8px 12px;
+  border: 1px solid #45475a;
+  border-radius: 10px;
+  background-color: rgba(24, 24, 37, 0.9);
+  color: #ffffff;
+}
+
+#inner-box {
+  margin: 0 12px 12px;
+  border: none;
+  background-color: transparent;
+}
+
+#outer-box {
+  margin: 0;
+  border: none;
+  background-color: transparent;
+}
+
+#scroll {
+  margin: 0;
+  border: none;
+  background-color: transparent;
+}
+
+#text {
+  margin: 0 8px;
+  color: #ffffff;
+}
+
+#text:selected {
+  color: #ffffff;
+}
+
+#entry {
+  padding: 8px 12px;
+  border-radius: 10px;
+  background-color: transparent;
+}
+
+#entry:selected {
+  background-color: rgba(69, 71, 90, 0.8);
+  border-radius: 10px;
+  outline: none;
+}

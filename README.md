@@ -161,6 +161,8 @@ niri/
 ├── .local/
 │   ├── bin/gufw                       ← Wrapper do firewall (pkexec + dark)
 │   └── share/applications/gufw.desktop ← Atalho do firewall
+├── .config/
+│   └── systemd/user/mount-drive.service ← Montagem automática de drives remotos
 ├── etc/
 │   └── pacman.d/hooks/kde-cache.hook  ← Hook pós-transação do pacman
 └── README.md
@@ -186,6 +188,7 @@ niri/
 
 ## 💡 Dicas
 
+- **Montagem automática de drives remotos (rclone)**: o script `~/.config/scripts/mount_drive.sh` monta Google Drive, Mega e OneDrive automaticamente via systemd. Para adicionar mais drives, edite o script e copie um bloco. O serviço só ativa se o `rclone` estiver instalado (`ConditionPathExists=/usr/bin/rclone`). Se a rede não estiver disponível no boot, ele tenta novamente a cada 30s.
 - **Internet por celular (USB tethering)**: conecte o celular no USB, ative o roteamento USB — o NetworkManager gerencia automaticamente
 - **Atualizar o sistema**: `sudo pacman -Syu`
 - **Instalar programas do AUR**: `yay -S nome-do-pacote`

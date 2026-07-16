@@ -185,7 +185,7 @@ OFFICIAL_PACKAGES=(
   bluez bluez-hid2hci bluez-tools bluez-utils bluez-deprecated-tools
   blueman libldac libfdk-aac xwayland-satellite xorg-xhost
   pipewire pipewire-pulse pipewire-alsa pipewire-audio wireplumber
-  grim slurp wl-clipboard fuzzel playerctl brightnessctl libnotify
+  grim slurp wl-clipboard wofi playerctl brightnessctl libnotify
   linux-lts-headers linux-zen-headers
   nwg-look xsettingsd
   noto-fonts noto-fonts-emoji ttf-dejavu
@@ -401,6 +401,46 @@ fi
 info "environment.d é lido pelo systemd --user no login. Essas variáveis"
 info "ficam disponíveis para portais, DBus activation e qualquer processo"
 info "iniciado pelo systemd."
+quote
+
+# ──────────────────────────────────────────────
+# 8e. Script de montagem de drives (rclone) — opcional
+# ──────────────────────────────────────────────
+step "💾 Script de montagem de drives remotos (rclone)..."
+
+mkdir -p "$HOME/.config/systemd/user"
+cp "$SCRIPT_DIR/.config/systemd/user/mount-drive.service" "$HOME/.config/systemd/user/"
+ok "mount-drive.service copiado"
+
+mkdir -p "$HOME/.config/scripts"
+for scr in "$SCRIPT_DIR"/.config/scripts/*.sh; do
+  cp "$scr" "$HOME/.config/scripts/"
+  chmod +x "$HOME/.config/scripts/$(basename "$scr")"
+done
+ok "scripts copiados e com permissão de execução"
+
+if command -v rclone &>/dev/null; then
+  info "rclone detectado — deseja ATIVAR a montagem automática dos drives no login?"
+  echo -n "  [1] Sim, ativar agora   [2] Não, vou configurar depois  [3] Ignorar  "
+  read -r choice
+  case "$choice" in
+    1)
+      systemctl --user daemon-reload
+      systemctl --user enable --now mount-drive.service && ok "Montagem automática ativada!" || warn "Falha ao ativar serviço"
+      ;;
+    2)
+      info "Para ativar depois: systemctl --user enable --now mount-drive.service"
+      ;;
+    *)
+      warn "Ignorando montagem automática"
+      ;;
+  esac
+else
+  warn "rclone não está instalado. O serviço foi copiado mas NÃO ativado."
+  info "Instale o rclone com: sudo pacman -S rclone"
+  info "Depois configure: rclone config"
+  info "E ative: systemctl --user enable --now mount-drive.service"
+fi
 quote
 
 # ──────────────────────────────────────────────
