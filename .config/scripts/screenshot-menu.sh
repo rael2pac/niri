@@ -15,45 +15,51 @@ ESCOLHA=$(
   echo "📐  Área selecionada"
   echo "🪟  Janela ativa"
   echo "🖥️  Ambos monitores"
-  echo "⏱️  Timer 3s"
-  echo "⏱️  Timer 5s"
-  echo "⏱️  Timer 10s"
-  echo "✏️  Tela inteira (editar no satty)"
-  echo "✏️  Área selecionada (editar no satty)"
-  echo "✏️  Janela ativa (editar no satty)"
+  echo "🖥️  Monitor específico"
   while IFS= read -r m; do
-    echo "🖥️  $m"
+    echo "⏱️  Timer 5s ($m)"
+    echo "⏱️  Timer 10s ($m)"
   done <<< "$MONITORES"
+  echo "✏️  Tela inteira (satty)"
+  echo "✏️  Área selecionada (satty)"
+  echo "✏️  Janela ativa (satty)"
   echo "❌  Fechar"
-} | wofi --dmenu --prompt "📸 Screenshot" --width 450 --height 450 --location center 2>/dev/null
+} | wofi --dmenu --prompt "📸 Screenshot" --width 450 --height 500 --location center 2>/dev/null
 ) || exit 0
 
 CAPTURAR=""
 EDITAR=false
 
-case "$ESCOLHA" in
-  "📷  Tela inteira")
-    CAPTURAR="grim -o \"$(niri msg -j focused-output | grep -oP '"name":\s*"\K[^"]+')\" -" ;;
-  "📐  Área selecionada")
-    CAPTURAR="grim -g \"\$(slurp)\" -" ;;
-  "🪟  Janela ativa")
-    CAPTURAR="niri msg action screenshot-window" ;;
-  "🖥️  Ambos monitores")
-    CAPTURAR="grim -" ;;
-  "⏱️  Timer 3s") bash "$HOME/.config/scripts/screenshot-timer.sh" 3;;
-  "⏱️  Timer 5s") bash "$HOME/.config/scripts/screenshot-timer.sh" 5;;
-  "⏱️  Timer 10s") bash "$HOME/.config/scripts/screenshot-timer.sh" 10;;
-  "✏️  Tela inteira (editar no satty)")
-    CAPTURAR="grim -o \"$(niri msg -j focused-output | grep -oP '"name":\s*"\K[^"]+')\" -"; EDITAR=true ;;
-  "✏️  Área selecionada (editar no satty)")
-    CAPTURAR="grim -g \"\$(slurp)\" -"; EDITAR=true ;;
-  "✏️  Janela ativa (editar no satty)")
-    CAPTURAR="niri msg action screenshot-window"; EDITAR=true ;;
-  🖥️\ *)
-    NOME="${ESCOLHA#🖥️  }"
-    CAPTURAR="grim -o \"$NOME\" -" ;;
-  *) exit 0 ;;
-esac
+if [[ "$ESCOLHA" == *"Tela inteira"* && "$ESCOLHA" != *"satty"* ]]; then
+  CAPTURAR="grim -o \"$(niri msg -j focused-output | grep -oP '"name":\s*"\K[^"]+')\" -"
+elif [[ "$ESCOLHA" == *"Área selecionada"* && "$ESCOLHA" != *"satty"* ]]; then
+  CAPTURAR="grim -g \"\$(slurp)\" -"
+elif [[ "$ESCOLHA" == *"Janela ativa"* && "$ESCOLHA" != *"satty"* ]]; then
+  CAPTURAR="niri msg action screenshot-window"
+elif [[ "$ESCOLHA" == *"Ambos monitores"* ]]; then
+  CAPTURAR="grim -"
+elif [[ "$ESCOLHA" == *"Monitor específico"* ]]; then
+  NOME=$(echo "$MONITORES" | wofi --dmenu --prompt "Escolher monitor" --width 300 --height 200 --location center 2>/dev/null) || exit 0
+  CAPTURAR="grim -o \"$NOME\" -"
+elif [[ "$ESCOLHA" == *"Timer 5s"* ]]; then
+  MONITOR=$(echo "$ESCOLHA" | grep -oP '\(\K[^)]+')
+  bash "$HOME/.config/scripts/screenshot-timer.sh" 5 "$MONITOR"
+  exit 0
+elif [[ "$ESCOLHA" == *"Timer 10s"* ]]; then
+  MONITOR=$(echo "$ESCOLHA" | grep -oP '\(\K[^)]+')
+  bash "$HOME/.config/scripts/screenshot-timer.sh" 10 "$MONITOR"
+  exit 0
+elif [[ "$ESCOLHA" == *"Tela inteira (satty)"* ]]; then
+  CAPTURAR="grim -o \"$(niri msg -j focused-output | grep -oP '"name":\s*"\K[^"]+')\" -"; EDITAR=true
+elif [[ "$ESCOLHA" == *"Área selecionada (satty)"* ]]; then
+  CAPTURAR="grim -g \"\$(slurp)\" -"; EDITAR=true
+elif [[ "$ESCOLHA" == *"Janela ativa (satty)"* ]]; then
+  CAPTURAR="niri msg action screenshot-window"; EDITAR=true
+elif [[ "$ESCOLHA" == *"Fechar"* ]]; then
+  exit 0
+else
+  exit 0
+fi
 
 if [ -n "$CAPTURAR" ]; then
   if $EDITAR; then
