@@ -15,6 +15,9 @@ __pycache__/
 .DS_Store
 thumbs.db
 
+# rclone config (tokens privados)
+.config/rclone/rclone.conf
+
 # tar.gz only allowed for shipped icon themes
 *.tar.gz
 !KrystalSVG-Devices.tar.gz
