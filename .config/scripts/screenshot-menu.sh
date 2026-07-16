@@ -40,9 +40,9 @@ case "$ESCOLHA" in
     CAPTURAR="niri msg action screenshot-window" ;;
   "🖥️  Ambos monitores")
     CAPTURAR="grim -" ;;
-  "⏱️  Timer 3s") timer 3;;
-  "⏱️  Timer 5s") timer 5;;
-  "⏱️  Timer 10s") timer 10;;
+  "⏱️  Timer 3s") bash "$HOME/.config/scripts/screenshot-timer.sh" 3;;
+  "⏱️  Timer 5s") bash "$HOME/.config/scripts/screenshot-timer.sh" 5;;
+  "⏱️  Timer 10s") bash "$HOME/.config/scripts/screenshot-timer.sh" 10;;
   "✏️  Tela inteira (editar no satty)")
     CAPTURAR="grim -o \"$(niri msg -j focused-output | grep -oP '"name":\s*"\K[^"]+')\" -"; EDITAR=true ;;
   "✏️  Área selecionada (editar no satty)")
