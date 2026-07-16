@@ -404,15 +404,9 @@ info "iniciado pelo systemd."
 quote
 
 # ──────────────────────────────────────────────
-# 8e. Scripts de sistema (rclone mount, wofi menus, etc.)
+# 8e. Scripts de sistema (wofi menus, screenshots, etc.)
 # ──────────────────────────────────────────────
 step "💾 Copiando scripts de sistema..."
-
-mkdir -p "$HOME/.config/systemd/user"
-if [ -f "$SCRIPT_DIR/.config/systemd/user/mount-drive.service" ]; then
-  cp "$SCRIPT_DIR/.config/systemd/user/mount-drive.service" "$HOME/.config/systemd/user/"
-  ok "mount-drive.service copiado — para ativar: bash setup-rclone.sh"
-fi
 
 mkdir -p "$HOME/.config/scripts"
 for scr in "$SCRIPT_DIR"/.config/scripts/*.sh; do
