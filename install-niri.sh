@@ -217,7 +217,7 @@ quote
 AUR_PACKAGES=(
   noctalia-shell noctalia-qs
   qt6ct-kde ttf-ms-fonts
-  orchis-theme adw-gtk-theme
+  orchis-theme adw-gtk-theme qt6-svg qt6-virtualkeyboard qt6-multimedia-ffmpeg
 )
 
 step "🌟 Instalando pacotes AUR..."
@@ -272,21 +272,44 @@ ok "Nerd Fonts instaladas — seu terminal nunca mais será o mesmo"
 quote
 
 # ──────────────────────────────────────────────
-# 7. SDDM + Astronaut Theme
+# 7. SDDM + Simple SDDM Theme 2
 # ──────────────────────────────────────────────
 step "🚀 Configurando SDDM..."
 
-if ! pacman -Qi sddm-astronaut-theme &>/dev/null; then
-  info "Instalando tema astronauta..."
-  yay -S --needed --noconfirm sddm-astronaut-theme
+THEME_DIR="/usr/share/sddm/themes/simple_sddm_2"
+if [ ! -d "$THEME_DIR" ]; then
+  info "Instalando tema Simple SDDM 2 (QT6)..."
+  sudo pacman -S --needed --noconfirm qt6-svg qt6-virtualkeyboard qt6-multimedia-ffmpeg
+  git clone --depth=1 https://github.com/JaKooLit/simple-sddm-2.git /tmp/simple-sddm-2
+  sudo mkdir -p "$THEME_DIR"
+  sudo cp -r /tmp/simple-sddm-2/* "$THEME_DIR"
+  rm -rf /tmp/simple-sddm-2
+  sudo tee -a "$THEME_DIR/theme.conf" > /dev/null <<'TRANS'
+TranslatePlaceholderUsername="Usuário"
+TranslatePlaceholderPassword="Senha"
+TranslateLogin="Entrar"
+TranslateLoginFailedWarning="Login ou senha incorretos"
+TranslateCapslockWarning="Caps Lock ativado"
+TranslateSuspend="Suspender"
+TranslateHibernate="Hibernar"
+TranslateReboot="Reiniciar"
+TranslateShutdown="Desligar"
+TranslateSessionSelection="Selecionar Sessão"
+TranslateVirtualKeyboardButtonOn="Teclado Virtual"
+TranslateVirtualKeyboardButtonOff="Fechar Teclado"
+TRANS
+  sudo sed -i 's/^Locale=""/Locale="pt_BR"/' "$THEME_DIR/theme.conf"
 fi
 
 sudo mkdir -p /etc/sddm.conf.d
 sudo tee /etc/sddm.conf.d/theme.conf > /dev/null <<'EOF'
 [Theme]
-Current=sddm-astronaut-theme
+Current=simple_sddm_2
+
+[General]
+InputMethod=qtvirtualkeyboard
 EOF
-ok "Tema astronauta definido como padrão"
+ok "Simple SDDM 2 definido como padrão com tradução em português"
 
 if [ -n "$PENDRIVE" ] && [ -f "$PENDRIVE/sddm.conf.tar.gz" ]; then
   sudo tar -xzf "$PENDRIVE/sddm.conf.tar.gz" -C /etc/

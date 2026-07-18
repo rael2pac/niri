@@ -11,7 +11,7 @@ Perfeito para quem quer um Arch bonito, funcional e pronto para o dia a dia sem 
 | **Shell/Gerenciador** | Noctalia Shell (barra, widgets, painéis) |
 | **Terminal** | Kitty + Fish + JetBrainsMono Nerd Font |
 | **Tema** | Escuro (adw-gtk3-dark, Breeze Dark) |
-| **Login** | SDDM + Tema Astronaut |
+| **Login** | SDDM + Simple SDDM 2 (QT6) — traduzido para português |
 | **Navegador** | Firefox |
 | **Arquivos** | Dolphin (KDE) |
 | **Editor** | VS Code, Kate |
@@ -55,9 +55,9 @@ curl -sS https://raw.githubusercontent.com/rael2pac/niri/main/install-niri.sh | 
 
 **O script faz tudo sozinho:**
 - Instala todos os pacotes (Niri, Noctalia Shell, Dolphin, Firefox, áudio, Bluetooth, firewall, etc.)
-- Configura tema escuro, ícones e fontes
-- Cria o wrapper do GUFW (para abrir o firewall em modo escuro sem erros)
-- Configura SDDM com tema Astronaut
+-   Configura tema escuro, ícones e fontes
+-   Cria o wrapper do GUFW (para abrir o firewall em modo escuro sem erros)
+-   Configura SDDM com tema Simple SDDM 2 (QT6) em português
 - Ativa Bluetooth, áudio e serviços necessários
 - No final pergunta se quer iniciar o SDDM ou reiniciar
 
