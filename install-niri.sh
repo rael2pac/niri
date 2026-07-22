@@ -66,7 +66,7 @@ banner() {
   echo -e "  ${RED}╚═╝  ╚═══╝${GREEN}╚═╝${YELLOW}╚═╝  ╚═╝${BLUE}╚═╝"
   echo -e "${NC}"
   echo -e "  ${CYAN}▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓${NC}"
-  echo -e "  ${CYAN}▓${NC}        ${BOLD}Niri + Noctalia-shell${NC}          ${CYAN}▓${NC}"
+  echo -e "  ${CYAN}▓${NC}        ${BOLD}Niri + Noctalia${NC}          ${CYAN}▓${NC}"
   echo -e "  ${CYAN}▓${NC}     ${YELLOW}Instalação Completa — Arch Linux${NC}    ${CYAN}▓${NC}"
   echo -e "  ${CYAN}▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓${NC}"
   echo -e "  ${MAG}✦${NC}  ${BOLD}By Rael2pac${NC}  ${MAG}✦${NC}"
@@ -215,7 +215,7 @@ quote
 # 5. Pacotes AUR
 # ──────────────────────────────────────────────
 AUR_PACKAGES=(
-  noctalia-shell noctalia-qs
+  noctalia-git
   qt6ct-kde ttf-ms-fonts
   orchis-theme adw-gtk-theme qt6-svg qt6-virtualkeyboard qt6-multimedia-ffmpeg
 )

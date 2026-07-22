@@ -79,7 +79,7 @@ spawn-at-startup "xhost" "+SI:localuser:root"
 // Necessário para o nwg-look funcionar sem abrir manualmente
 spawn-at-startup "xsettingsd"
 spawn-at-startup "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
-spawn-at-startup "qs" "-c" "noctalia-shell"
+spawn-at-startup "noctalia"
 // PROPAGAÇÃO DE VARIÁVEIS DE AMBIENTE PARA O SYSTEMD/DBUS
 // ──────────────────────────────────────────────────────────────────────────────
 // O block `environment {}` do Niri SÓ afeta processos que ele spawna diretamente
@@ -173,11 +173,35 @@ window-rule {
     }
 }
 
+// Noctalia v5 — janela de configuração flutuante
+window-rule {
+    match app-id="dev.noctalia.Noctalia"
+    open-floating true
+    default-column-width { fixed 1080; }
+    default-window-height { fixed 920; }
+}
+
+// Noctalia v5 — blur nas camadas (bar, painéis, dock, notificações, OSD)
 layer-rule {
-    match namespace="^launcher$"
+    match namespace="^noctalia-(bar-[^\"]+|notification|dock|panel|attached-panel|osd)$"
+    background-effect {
+        xray false
+    }
+}
+
+// Noctalia v5 — blur no window switcher
+layer-rule {
+    match namespace="noctalia-window-switcher"
     background-effect {
         blur true
+        xray false
     }
+}
+
+// Noctalia v5 — backdrop difuminado no overview
+layer-rule {
+    match namespace="^noctalia-backdrop"
+    place-within-backdrop true
 }
 
 window-rule {
@@ -199,7 +223,9 @@ binds {
     Mod+Shift+Slash { show-hotkey-overlay; }
 
     Mod+T { spawn "kitty"; }
-    Mod+D { spawn-sh "fish -c noctalia-r"; }
+    // Mod+D { spawn-sh "fish -c noctalia-r"; } // v4 launcher
+    Mod+D { spawn-sh "noctalia msg panel-toggle launcher"; } // v5 launcher
+    Mod+Shift+N { spawn-sh "pkill -x noctalia; sleep 1; exec noctalia &"; }
     Super+Alt+L { spawn "swaylock"; }
     Mod+E { spawn "dolphin"; }
 
@@ -356,7 +382,7 @@ binds {
     Mod+Ctrl+S { spawn-sh "wl-paste | satty -f -"; }
     Mod+Ctrl+D { spawn-sh "wl-paste | swappy -f -"; }
 
-    Mod+Shift+0 { spawn-sh "bash $HOME/.config/scripts/monitor-menu.sh"; }
+    Mod+Shift+3 { spawn-sh "bash $HOME/.config/scripts/monitor-menu.sh"; }
     Mod+Shift+1 { spawn-sh "if niri msg outputs | grep -A1 '(DP-1)' | grep -q 'Current mode'; then niri msg output DP-1 off; else niri msg output DP-1 on; fi"; }
     Mod+Shift+2 { spawn-sh "if niri msg outputs | grep -A1 '(HDMI-A-1)' | grep -q 'Current mode'; then niri msg output HDMI-A-1 off; else niri msg output HDMI-A-1 on; fi"; }
     Mod+Shift+E { quit; }
@@ -390,4 +416,9 @@ hotkey-overlay {
 window-rule {
     match app-id=r"^kitty$"
     open-on-output "DP-1"
+}
+
+// Noctalia v5 — permite ativação de janelas e ações de notificação
+debug {
+    honor-xdg-activation-with-invalid-serial
 }
