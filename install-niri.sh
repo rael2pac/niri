@@ -324,7 +324,7 @@ step "📂 Restaurando suas configurações..."
 
 if [ -n "$PENDRIVE" ]; then
   info "Extraindo configs do pendrive..."
-  for archive in niri.tar.gz noctalia.tar.gz; do
+  for archive in niri.tar.gz; do
     if [ -f "$PENDRIVE/$archive" ]; then
       tar -xzf "$PENDRIVE/$archive" -C "$HOME/.config"
       ok "${archive%.tar.gz} restaurado"
@@ -399,6 +399,67 @@ Type=Application
 Categories=GNOME;GTK;Settings;Security;
 GUFWDESKTOP
 ok "gufw wrapper criado (xhost + pkexec + tema escuro)"
+quote
+
+# ──────────────────────────────────────────────
+# 8d. Noctalia v5 — settings.toml com plugins
+# ──────────────────────────────────────────────
+step "🌙 Configurando Noctalia v5..."
+
+NOCTALIA_CONFIG="$HOME/.local/state/noctalia/settings.toml"
+mkdir -p "$(dirname "$NOCTALIA_CONFIG")"
+
+if [ ! -f "$NOCTALIA_CONFIG" ]; then
+  cat > "$NOCTALIA_CONFIG" << 'NOCTALIA_EOF'
+config_version = 2
+
+[plugins]
+
+    [[plugins.source]]
+    kind = "git"
+    location = "https://github.com/noctalia-dev/official-plugins"
+    name = "official"
+
+    [[plugins.source]]
+    kind = "git"
+    location = "https://github.com/noctalia-dev/community-plugins"
+    name = "community"
+
+    [[plugins.source]]
+    kind = "git"
+    location = "https://github.com/rael2pac/noctalia-v5-plugins.git"
+    name = "rael2pac"
+
+[shell]
+screen_time_enabled = true
+
+[system.monitor]
+cpu_poll_seconds = 2.0
+gpu_poll_seconds = 5.0
+NOCTALIA_EOF
+  ok "Noctalia v5 settings.toml criado com plugins rael2pac"
+else
+  # Garantir que source rael2pac existe
+  if ! grep -q 'rael2pac/noctalia-v5-plugins' "$NOCTALIA_CONFIG"; then
+    cat >> "$NOCTALIA_CONFIG" << 'NOCTALIA_SRC'
+
+    [[plugins.source]]
+    kind = "git"
+    location = "https://github.com/rael2pac/noctalia-v5-plugins.git"
+    name = "rael2pac"
+NOCTALIA_SRC
+    ok "Source rael2pac adicionada ao settings.toml"
+  fi
+  # Garantir que [system.monitor] com gpu_poll_seconds existe
+  if ! grep -q 'gpu_poll_seconds' "$NOCTALIA_CONFIG"; then
+    if grep -q '^\[system\.monitor\]' "$NOCTALIA_CONFIG"; then
+      sed -i '/^\[system\.monitor\]/a gpu_poll_seconds = 5.0' "$NOCTALIA_CONFIG"
+    else
+      printf '\n[system.monitor]\ncpu_poll_seconds = 2.0\ngpu_poll_seconds = 5.0\n' >> "$NOCTALIA_CONFIG"
+    fi
+    ok "gpu_poll_seconds adicionado ao system.monitor"
+  fi
+fi
 quote
 
 # ──────────────────────────────────────────────
