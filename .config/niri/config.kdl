@@ -79,6 +79,9 @@ spawn-at-startup "xhost" "+SI:localuser:root"
 // Necessário para o nwg-look funcionar sem abrir manualmente
 spawn-at-startup "xsettingsd"
 spawn-at-startup "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
+// Noctalia v4 (Quickshell) — desativado para teste da v5
+// spawn-at-startup "qs" "-c" "noctalia-shell"
+// Noctalia v5 (nativo Wayland/OpenGL)
 spawn-at-startup "noctalia"
 // PROPAGAÇÃO DE VARIÁVEIS DE AMBIENTE PARA O SYSTEMD/DBUS
 // ──────────────────────────────────────────────────────────────────────────────
@@ -409,6 +412,11 @@ output "DP-1" {
     focus-at-startup
 }
 
+// Noctalia v5 — permite ativação de janelas e ações de notificação
+debug {
+    honor-xdg-activation-with-invalid-serial
+}
+
 hotkey-overlay {
     skip-at-startup
 }
@@ -416,9 +424,4 @@ hotkey-overlay {
 window-rule {
     match app-id=r"^kitty$"
     open-on-output "DP-1"
-}
-
-// Noctalia v5 — permite ativação de janelas e ações de notificação
-debug {
-    honor-xdg-activation-with-invalid-serial
 }
