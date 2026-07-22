@@ -222,7 +222,7 @@ OFFICIAL_PACKAGES=(
   alsa-utils ffmpeg ffmpegthumbs ffmpegthumbnailer
   breeze breeze5 breeze-icons breeze-gtk qt5ct
   ufw gufw ufw-extras
-  satty cpio vulkan-tools imagemagick
+  satty cpio vulkan-tools imagemagick chafa
   bluez bluez-hid2hci bluez-tools bluez-utils bluez-deprecated-tools
   blueman libldac libfdk-aac xwayland-satellite xorg-xhost
   pipewire pipewire-pulse pipewire-alsa pipewire-audio wireplumber
