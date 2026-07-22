@@ -116,7 +116,48 @@ fi
 ok "Acesso sudo confirmado"
 
 # ──────────────────────────────────────────────
-# 2. Detectar pendrive com configs
+# 2a. Limpeza de Noctalia v4 (se existir)
+# ──────────────────────────────────────────────
+step "🧹 Removendo Noctalia v4 (se existir)..."
+
+V4_PACKAGES="noctalia-shell noctalia-qs quickshell"
+V4_FOUND=""
+
+for pkg in $V4_PACKAGES; do
+  if pacman -Qi "$pkg" &>/dev/null; then
+    info "Removendo $pkg..."
+    sudo pacman -Rdd --noconfirm "$pkg" 2>/dev/null || true
+    V4_FOUND="$V4_FOUND $pkg"
+  fi
+done
+
+# Remover config v4 (~/.config/noctalia/) se contiver JSON (v4)
+if [ -d "$HOME/.config/noctalia" ]; then
+  if ls "$HOME/.config/noctalia/"*.json &>/dev/null 2>&1; then
+    info "Config v4 detectada (JSON) em ~/.config/noctalia/ — removendo..."
+    rm -rf "$HOME/.config/noctalia"
+    ok "Config v4 removida"
+  else
+    info "~/.config/noctalia/ existe mas não tem JSON — mantendo (pode ser v5)"
+  fi
+fi
+
+# Remover pasta noctaliav5 (não oficial)
+if [ -d "$HOME/.config/noctaliav5" ]; then
+  info "Removendo ~/.config/noctaliav5/ (não oficial)..."
+  rm -rf "$HOME/.config/noctaliav5"
+  ok "noctaliav5 removido"
+fi
+
+if [ -n "$V4_FOUND" ]; then
+  ok "Pacotes v4 removidos:$V4_FOUND"
+else
+  ok "Nenhum pacote v4 encontrado"
+fi
+quote
+
+# ──────────────────────────────────────────────
+# 2b. Detectar pendrive com configs
 # ──────────────────────────────────────────────
 step "🔍 Procurando backup em pendrive..."
 
