@@ -402,17 +402,17 @@ ok "gufw wrapper criado (xhost + pkexec + tema escuro)"
 quote
 
 # ──────────────────────────────────────────────
-# 8d. Noctalia v5 — settings.toml com plugins
+# 8d. Noctalia v5 — config.toml oficial (hand-written)
 # ──────────────────────────────────────────────
 step "🌙 Configurando Noctalia v5..."
 
-NOCTALIA_CONFIG="$HOME/.local/state/noctalia/settings.toml"
-mkdir -p "$(dirname "$NOCTALIA_CONFIG")"
+NOCTALIA_CONFIG_DIR="$HOME/.config/noctalia"
+NOCTALIA_CONFIG="$NOCTALIA_CONFIG_DIR/config.toml"
+
+mkdir -p "$NOCTALIA_CONFIG_DIR"
 
 if [ ! -f "$NOCTALIA_CONFIG" ]; then
   cat > "$NOCTALIA_CONFIG" << 'NOCTALIA_EOF'
-config_version = 2
-
 [plugins]
 
     [[plugins.source]]
@@ -430,16 +430,13 @@ config_version = 2
     location = "https://github.com/rael2pac/noctalia-v5-plugins.git"
     name = "rael2pac"
 
-[shell]
-screen_time_enabled = true
-
 [system.monitor]
 cpu_poll_seconds = 2.0
 gpu_poll_seconds = 5.0
 NOCTALIA_EOF
-  ok "Noctalia v5 settings.toml criado com plugins rael2pac"
+  ok "Noctalia v5 config.toml criado com plugins rael2pac"
 else
-  # Garantir que source rael2pac existe
+  # Garantir que source rael2pac existe no config.toml
   if ! grep -q 'rael2pac/noctalia-v5-plugins' "$NOCTALIA_CONFIG"; then
     cat >> "$NOCTALIA_CONFIG" << 'NOCTALIA_SRC'
 
@@ -448,7 +445,7 @@ else
     location = "https://github.com/rael2pac/noctalia-v5-plugins.git"
     name = "rael2pac"
 NOCTALIA_SRC
-    ok "Source rael2pac adicionada ao settings.toml"
+    ok "Source rael2pac adicionada ao config.toml"
   fi
   # Garantir que [system.monitor] com gpu_poll_seconds existe
   if ! grep -q 'gpu_poll_seconds' "$NOCTALIA_CONFIG"; then
@@ -459,6 +456,19 @@ NOCTALIA_SRC
     fi
     ok "gpu_poll_seconds adicionado ao system.monitor"
   fi
+fi
+
+# Fallback: se settings.toml (GUI) já existe, garante source rael2pac lá também
+NOCTALIA_SETTINGS="$HOME/.local/state/noctalia/settings.toml"
+if [ -f "$NOCTALIA_SETTINGS" ] && ! grep -q 'rael2pac/noctalia-v5-plugins' "$NOCTALIA_SETTINGS"; then
+  cat >> "$NOCTALIA_SETTINGS" << 'NOCTALIA_SET'
+
+    [[plugins.source]]
+    kind = "git"
+    location = "https://github.com/rael2pac/noctalia-v5-plugins.git"
+    name = "rael2pac"
+NOCTALIA_SET
+  ok "Source rael2pac adicionada ao settings.toml (GUI)"
 fi
 quote
 

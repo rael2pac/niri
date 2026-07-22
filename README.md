@@ -148,6 +148,7 @@ niri/
 ├── install-niri.sh                   ← Script de instalação completo
 ├── .config/
 │   ├── niri/config.kdl               ← Config do compositor
+│   ├── noctalia/config.toml          ← Config hand-written do Noctalia v5
 │   ├── fish/                          ← Config do Fish shell
 │   ├── kitty/                         ← Config do terminal Kitty
 │   ├── fastfetch/                     ← Info do sistema

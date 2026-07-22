@@ -1,0 +1,20 @@
+[plugins]
+
+    [[plugins.source]]
+    kind = "git"
+    location = "https://github.com/noctalia-dev/official-plugins"
+    name = "official"
+
+    [[plugins.source]]
+    kind = "git"
+    location = "https://github.com/noctalia-dev/community-plugins"
+    name = "community"
+
+    [[plugins.source]]
+    kind = "git"
+    location = "https://github.com/rael2pac/noctalia-v5-plugins.git"
+    name = "rael2pac"
+
+[system.monitor]
+cpu_poll_seconds = 2.0
+gpu_poll_seconds = 5.0
