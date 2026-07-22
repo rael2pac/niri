@@ -56,7 +56,7 @@
             "type": "command",
             "key": "󰅫 ",
             "keyColor": "34",
-            "text": "pacman -Q noctalia-shell 2>/dev/null"
+            "text": "pacman -Q noctalia-git 2>/dev/null || pacman -Q noctalia 2>/dev/null"
         },
         {
             "type": "terminal",
