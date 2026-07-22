@@ -1,4 +1,4 @@
-# Dotfiles — Niri + Noctalia Shell + Arch Linux
+# Dotfiles — Niri + Noctalia v5 + Arch Linux
 
 Configurações pessoais do meu ambiente Arch Linux feitas por [Rael2pac](https://github.com/rael2pac).
 Perfeito para quem quer um Arch bonito, funcional e pronto para o dia a dia sem precisar configurar nada na mão.
@@ -8,7 +8,7 @@ Perfeito para quem quer um Arch bonito, funcional e pronto para o dia a dia sem 
 | Categoria | Programas |
 |-----------|-----------|
 | **Compositor** | Niri (Wayland, scrollável por workspaces) |
-| **Shell/Gerenciador** | Noctalia Shell (barra, widgets, painéis) |
+| **Shell/Gerenciador** | Noctalia v5 (barra, widgets, painéis) |
 | **Terminal** | Kitty + Fish + JetBrainsMono Nerd Font |
 | **Tema** | Escuro (adw-gtk3-dark, Breeze Dark) |
 | **Login** | SDDM + Simple SDDM 2 (QT6) — traduzido para português |
@@ -54,10 +54,11 @@ curl -sS https://raw.githubusercontent.com/rael2pac/niri/main/install-niri.sh | 
 ```
 
 **O script faz tudo sozinho:**
-- Instala todos os pacotes (Niri, Noctalia Shell, Dolphin, Firefox, áudio, Bluetooth, firewall, etc.)
+- Instala todos os pacotes (Niri, Noctalia v5, Dolphin, Firefox, áudio, Bluetooth, firewall, etc.)
 -   Configura tema escuro, ícones e fontes
 -   Cria o wrapper do GUFW (para abrir o firewall em modo escuro sem erros)
 -   Configura SDDM com tema Simple SDDM 2 (QT6) em português
+-   Configura Noctalia v5 com plugins oficiais, da comunidade e rael2pac (inclui gpu-temp)
 - Ativa Bluetooth, áudio e serviços necessários
 - No final pergunta se quer iniciar o SDDM ou reiniciar
 
@@ -147,7 +148,6 @@ niri/
 ├── install-niri.sh                   ← Script de instalação completo
 ├── .config/
 │   ├── niri/config.kdl               ← Config do compositor
-│   ├── noctalia/                      ← Tema e settings do Noctalia Shell
 │   ├── fish/                          ← Config do Fish shell
 │   ├── kitty/                         ← Config do terminal Kitty
 │   ├── fastfetch/                     ← Info do sistema
@@ -171,7 +171,7 @@ niri/
 | Atalho | Ação |
 |--------|------|
 | `Mod+T` | Abrir terminal (Kitty) |
-| `Mod+D` | Lançador de apps (fuzzel) |
+| `Mod+D` | Lançador de apps (Noctalia) |
 | `Mod+E` | Abrir Dolphin |
 | `Mod+Q` | Fechar janela |
 | `Mod+F` | Maximizar coluna |
